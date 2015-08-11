@@ -82,6 +82,9 @@ on_client_unsubscribe(ClientId, Topics, _Env) ->
     io:format("client ~s unsubscribe ~p~n", [ClientId, Topics]).
 
 %% transform message and return
+on_message_publish(Message = #mqtt_messsage{topic = <<"$SYS/", _/binary>>, _Env) ->
+    Message;
+
 on_message_publish(Message, _Env) ->
     io:format("publish ~s~n", [emqttd_message:format(Message)]),
     Message.
@@ -91,6 +94,7 @@ on_message_acked(ClientId, Message, _Env) ->
 
 %% Called when the plugin application stop
 onunload() ->
+    io:format("Unload template hooks..."),
     emqttd_broker:unhook('client.connected', {?MODULE, on_client_connected}),
 
     emqttd_broker:unhook('client.disconnected', {?MODULE, on_client_disconnected}),
