@@ -64,10 +64,10 @@ onload(Env) ->
 
     
 
-on_client_connected(ConnAck, Client = #mqtt_client{client_id = ClientId}, _Env) ->
+on_client_connected(ConnAck, _Client = #mqtt_client{client_id = ClientId}, _Env) ->
     io:format("client ~s connected, connack: ~w~n", [ClientId, ConnAck]).
 
-on_client_disconnected(Reason, Client = #mqtt_client{client_id = ClientId}, _Env) ->
+on_client_disconnected(Reason, _Client = #mqtt_client{client_id = ClientId}, _Env) ->
     io:format("client ~s disconnected, reason: ~w~n", [ClientId, Reason]).
 
 %% should retain TopicTable
@@ -75,18 +75,18 @@ on_client_subscribe(ClientId, TopicTable, _Env) ->
     io:format("client ~s will subscribe ~p~n", [ClientId, TopicTable]),
     TopicTable.
    
-on_client_subscribe_after(ClientId, TopicTable, Env) ->
+on_client_subscribe_after(ClientId, TopicTable, _Env) ->
     io:format("client ~s subscribed ~p~n", [ClientId, TopicTable]).
     
-on_client_unsubscribe(ClientId, Topics) ->
+on_client_unsubscribe(ClientId, Topics, _Env) ->
     io:format("client ~s unsubscribe ~p~n", [ClientId, Topics]).
 
 %% transform message and return
-on_message_publish(Message, Opts) ->
+on_message_publish(Message, _Env) ->
     io:format("publish ~s~n", [emqttd_message:format(Message)]),
     Message.
 
-on_message_acked(ClientId, Message, Opts) ->
+on_message_acked(ClientId, Message, _Env) ->
     io:format("client ~s acked ~s", [ClientId, emqttd_message:format(Message)]).
 
 %% Called when the plugin application stop
