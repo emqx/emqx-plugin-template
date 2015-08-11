@@ -94,7 +94,6 @@ on_message_acked(ClientId, Message, _Env) ->
 
 %% Called when the plugin application stop
 onunload() ->
-    io:format("Unload template hooks..."),
     emqttd_broker:unhook('client.connected', {?MODULE, on_client_connected}),
 
     emqttd_broker:unhook('client.disconnected', {?MODULE, on_client_disconnected}),
