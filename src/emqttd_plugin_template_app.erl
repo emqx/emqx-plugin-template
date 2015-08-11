@@ -12,7 +12,7 @@
 start(_StartType, _StartArgs) ->
     {ok, Sup} = emqttd_plugin_template_sup:start_link(),
     Env = application:get_all_env(),
-    ok = emqttd_plugin_template:onload(Env),
+    emqttd_plugin_template:onload(Env),
     {ok, Sup}.
 
 stop(_State) ->
