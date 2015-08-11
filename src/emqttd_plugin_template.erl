@@ -82,7 +82,7 @@ on_client_unsubscribe(ClientId, Topics, _Env) ->
     io:format("client ~s unsubscribe ~p~n", [ClientId, Topics]).
 
 %% transform message and return
-on_message_publish(Message = #mqtt_messsage{topic = <<"$SYS/", _/binary>>}, _Env) ->
+on_message_publish(Message = #mqtt_message{topic = <<"$SYS/", _/binary>>}, _Env) ->
     Message;
 
 on_message_publish(Message, _Env) ->
