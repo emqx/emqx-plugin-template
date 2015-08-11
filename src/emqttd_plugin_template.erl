@@ -67,7 +67,7 @@ onload(Env) ->
 on_client_connected(ConnAck, _Client = #mqtt_client{client_id = ClientId}, _Env) ->
     io:format("client ~s connected, connack: ~w~n", [ClientId, ConnAck]).
 
-on_client_disconnected(Reason, _Client = #mqtt_client{client_id = ClientId}, _Env) ->
+on_client_disconnected(Reason, ClientId, _Env) ->
     io:format("client ~s disconnected, reason: ~w~n", [ClientId, Reason]).
 
 %% should retain TopicTable
