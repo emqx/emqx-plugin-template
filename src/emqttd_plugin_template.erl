@@ -79,7 +79,8 @@ on_client_subscribe_after(ClientId, TopicTable, _Env) ->
     io:format("client ~s subscribed ~p~n", [ClientId, TopicTable]).
     
 on_client_unsubscribe(ClientId, Topics, _Env) ->
-    io:format("client ~s unsubscribe ~p~n", [ClientId, Topics]).
+    io:format("client ~s unsubscribe ~p~n", [ClientId, Topics]),
+    Topics.
 
 %% transform message and return
 on_message_publish(Message = #mqtt_message{topic = <<"$SYS/", _/binary>>}, _Env) ->
