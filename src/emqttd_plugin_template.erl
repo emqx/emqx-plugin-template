@@ -24,10 +24,9 @@
 %%%
 %%% @end
 %%%-----------------------------------------------------------------------------
-
 -module(emqttd_plugin_template).
 
--include_lib("emqttd/include/emqttd.hrl").
+-include("../../../include/emqttd.hrl").
 
 -export([onload/1, onunload/0]).
 
