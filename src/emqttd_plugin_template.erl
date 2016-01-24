@@ -1,5 +1,5 @@
 %%%-----------------------------------------------------------------------------
-%%% Copyright (c) 2015 eMQTT.IO, All Rights Reserved.
+%%% Copyright (c) 2015-2016 eMQTT.IO, All Rights Reserved.
 %%%
 %%% Permission is hereby granted, free of charge, to any person obtaining a copy
 %%% of this software and associated documentation files (the "Software"), to deal
@@ -19,16 +19,15 @@
 %%% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 %%% SOFTWARE.
 %%%-----------------------------------------------------------------------------
-%%% @doc
-%%% emqttd plugin template.
+%%% @doc emqttd plugin template
 %%%
-%%% @end
+%%% @author Feng Lee <feng@emqtt.io>
 %%%-----------------------------------------------------------------------------
 -module(emqttd_plugin_template).
 
 -include("../../../include/emqttd.hrl").
 
--export([onload/1, onunload/0]).
+-export([load/1, unload/0]).
 
 %% Hooks functions
 -export([on_client_connected/3, on_client_disconnected/3]).
@@ -38,7 +37,7 @@
 -export([on_message_publish/2, on_message_acked/3]).
 
 %% Called when the plugin application start
-onload(Env) ->
+load(Env) ->
 
     emqttd_broker:hook('client.connected', {?MODULE, on_client_connected},
                        {?MODULE, on_client_connected, [Env]}),
@@ -93,7 +92,7 @@ on_message_acked(ClientId, Message, _Env) ->
     io:format("client ~s acked ~s", [ClientId, emqttd_message:format(Message)]).
 
 %% Called when the plugin application stop
-onunload() ->
+unload() ->
     emqttd_broker:unhook('client.connected', {?MODULE, on_client_connected}),
 
     emqttd_broker:unhook('client.disconnected', {?MODULE, on_client_disconnected}),
