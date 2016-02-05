@@ -23,4 +23,3 @@ emqttd_access_control:register_mod(acl, ?MODULE, Env).
 
 [Hooks Design](https://github.com/emqtt/emqttd/wiki/Hooks%20Design)
 
-
