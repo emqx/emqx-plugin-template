@@ -15,7 +15,6 @@
 %%--------------------------------------------------------------------
 
 %% @doc emqttd plugin template application.
-%% @author Feng Lee <feng@emqtt.io>
 -module(emqttd_plugin_template_app).
 
 -behaviour(application).

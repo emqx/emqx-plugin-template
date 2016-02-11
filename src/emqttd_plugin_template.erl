@@ -15,7 +15,6 @@
 %%--------------------------------------------------------------------
 
 %% @doc emqttd plugin template
-%% @author Feng Lee <feng@emqtt.io>
 -module(emqttd_plugin_template).
 
 -include("../../../include/emqttd.hrl").
