@@ -14,21 +14,20 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
-%% @doc emqttd plugin template application.
--module(emqttd_plugin_template_app).
+-module(emqttd_auth_demo).
 
--behaviour(application).
+-behaviour(emqttd_auth_mod).
 
-%% Application callbacks
--export([start/2, stop/1]).
+-include("../../../include/emqttd.hrl").
 
-start(_StartType, _StartArgs) ->
-    {ok, Sup} = emqttd_plugin_template_sup:start_link(),
-    ok = emqttd_access_control:register_mod(auth, emqttd_auth_demo, []),
-    ok = emqttd_access_control:register_mod(acl, emqttd_acl_demo, []),
-    emqttd_plugin_template:load(application:get_all_env()),
-    {ok, Sup}.
+-export([init/1, check/3, description/0]).
 
-stop(_State) ->
-    emqttd_plugin_template:unload().
+init(Opts) -> {ok, Opts}.
+
+check(#mqtt_client{client_id = ClientId, username = Username}, Password, _Opts) ->
+    io:format("Auth Demo: clientId=~p, username=~p, password=~p~n",
+              [ClientId, Username, Password]),
+    ok.
+
+description() -> "Auth Demo Module".
 

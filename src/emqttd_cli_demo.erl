@@ -14,21 +14,15 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
-%% @doc emqttd plugin template application.
--module(emqttd_plugin_template_app).
+-module(emqttd_cli_demo).
 
--behaviour(application).
+-include("../../../include/emqttd_cli.hrl").
 
-%% Application callbacks
--export([start/2, stop/1]).
+-export([cmd/1]).
 
-start(_StartType, _StartArgs) ->
-    {ok, Sup} = emqttd_plugin_template_sup:start_link(),
-    ok = emqttd_access_control:register_mod(auth, emqttd_auth_demo, []),
-    ok = emqttd_access_control:register_mod(acl, emqttd_acl_demo, []),
-    emqttd_plugin_template:load(application:get_all_env()),
-    {ok, Sup}.
+cmd(["arg1", "arg2"]) ->
+    ?PRINT_MSG("ok");
 
-stop(_State) ->
-    emqttd_plugin_template:unload().
+cmd(_) ->
+    ?USAGE([{"cmd arg1 arg2",  "cmd demo"}]).
 

@@ -52,8 +52,6 @@ load(Env) ->
     emqttd_broker:hook('message.acked', {?MODULE, on_message_acked},
                        {?MODULE, on_message_acked, [Env]}).
 
-    
-
 on_client_connected(ConnAck, _Client = #mqtt_client{client_id = ClientId}, _Env) ->
     io:format("client ~s connected, connack: ~w~n", [ClientId, ConnAck]).
 
