@@ -17,7 +17,7 @@
 %% @doc emqttd plugin template
 -module(emqttd_plugin_template).
 
--include("../../../include/emqttd.hrl").
+-include_lib("emqttd/include/emqttd.hrl").
 
 -export([load/1, unload/0]).
 

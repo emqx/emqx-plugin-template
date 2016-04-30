@@ -2,6 +2,7 @@
  [
   {description, "emqttd plugin template"},
   {vsn, "1.0"},
+  {modules, []},
   {registered, []},
   {applications, [
                   kernel,
