@@ -5,6 +5,8 @@ PROJECT_VERSION = 1.1
 DEPS = emqttd 
 dep_emqttd = git https://github.com/emqtt/emqttd plus
 
+COVER = true
+
 include erlang.mk
 
 app:: rebar.config
