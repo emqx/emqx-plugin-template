@@ -1,7 +1,7 @@
 {application, emqttd_plugin_template,
  [
   {description, "emqttd plugin template"},
-  {vsn, "1.0.2"},
+  {vsn, "1.1"},
   {registered, []},
   {applications, [
                   kernel,
