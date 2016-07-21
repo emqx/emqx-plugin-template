@@ -1,9 +1,9 @@
 PROJECT = emqttd_plugin_template
 PROJECT_DESCRIPTION = emqttd plugin template
-PROJECT_VERSION = 1.1
+PROJECT_VERSION = 2.0
 
 DEPS = emqttd 
-dep_emqttd = git https://github.com/emqtt/emqttd plus
+dep_emqttd = git https://github.com/emqtt/emqttd gen_conf
 
 COVER = true
 
