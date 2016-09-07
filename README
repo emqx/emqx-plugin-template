@@ -7,7 +7,7 @@ This is a template plugin for emqttd project.
 Plugin Config
 -------------
 
-Each plugin should have a 'etc/plugin.config' file to store application config.
+Each plugin should have a 'etc/{plugin_name}.conf' file to store application config.
 
 Authentication and ACL
 ----------------------

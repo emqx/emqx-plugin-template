@@ -17,7 +17,7 @@
 %% @doc emqttd plugin template
 -module(emqttd_plugin_template).
 
--include("../../../include/emqttd.hrl").
+-include_lib("emqttd/include/emqttd.hrl").
 
 -export([load/1, unload/0]).
 
@@ -43,22 +43,22 @@ on_client_connected(ConnAck, Client = #mqtt_client{client_id = ClientId}, _Env) 
     io:format("client ~s connected, connack: ~w~n", [ClientId, ConnAck]),
     {ok, Client}.
 
-on_client_disconnected(Reason, ClientId, _Env) ->
+on_client_disconnected(Reason, _Client = #mqtt_client{client_id = ClientId}, _Env) ->
     io:format("client ~s disconnected, reason: ~w~n", [ClientId, Reason]),
     ok.
 
 %% should retain TopicTable
-on_client_subscribe(ClientId, TopicTable, _Env) ->
-    io:format("client ~s will subscribe ~p~n", [ClientId, TopicTable]),
-    {ok, TopicTable}.
+on_client_subscribe({ClientId, Username}, {Topic, Opts}, _Env) ->
+    io:format("client(~s/~s) will subscribe ~p~n", [Username, ClientId, Topic]),
+    {ok, {Topic, Opts}}.
    
-on_client_subscribe_after(ClientId, TopicTable, _Env) ->
-    io:format("client ~s subscribed ~p~n", [ClientId, TopicTable]),
-    {ok, TopicTable}.
+on_client_subscribe_after({ClientId, Username}, {Topic, Opts}, _Env) ->
+    io:format("client(~s/~s) subscribed ~p~n", [Username, ClientId, Topic]),
+    {ok, {Topic, Opts}}.
     
-on_client_unsubscribe(ClientId, Topics, _Env) ->
-    io:format("client ~s unsubscribe ~p~n", [ClientId, Topics]),
-    {ok, Topics}.
+on_client_unsubscribe({ClientId, Username}, Topic, _Env) ->
+    io:format("client(~s/~s) unsubscribe ~p~n", [ClientId, Username, Topic]),
+    {ok, Topic}.
 
 %% transform message and return
 on_message_publish(Message = #mqtt_message{topic = <<"$SYS/", _/binary>>}, _Env) ->
@@ -68,12 +68,12 @@ on_message_publish(Message, _Env) ->
     io:format("publish ~s~n", [emqttd_message:format(Message)]),
     {ok, Message}.
 
-on_message_delivered(ClientId, Message, _Env) ->
-    io:format("delivered to client ~s: ~s~n", [ClientId, emqttd_message:format(Message)]),
+on_message_delivered({ClientId, Username}, Message, _Env) ->
+    io:format("delivered to client(~s/~s): ~s~n", [Username, ClientId, emqttd_message:format(Message)]),
     {ok, Message}.
 
-on_message_acked(ClientId, Message, _Env) ->
-    io:format("client ~s acked: ~s~n", [ClientId, emqttd_message:format(Message)]),
+on_message_acked({ClientId, Username}, Message, _Env) ->
+    io:format("client(~s/~s) acked: ~s~n", [Username, ClientId, emqttd_message:format(Message)]),
     {ok, Message}.
 
 %% Called when the plugin application stop
