@@ -26,7 +26,7 @@
 
 -export([on_client_subscribe/4, on_client_unsubscribe/4]).
 
--export([on_session_subscribed/4, on_session_unsubscribed/4]).
+-export([on_session_created/3, on_session_subscribed/4, on_session_unsubscribed/4, on_session_terminated/4]).
 
 -export([on_message_publish/2, on_message_delivered/4, on_message_acked/4]).
 
@@ -36,8 +36,10 @@ load(Env) ->
     emqttd:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
     emqttd:hook('client.subscribe', fun ?MODULE:on_client_subscribe/4, [Env]),
     emqttd:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/4, [Env]),
+    emqttd:hook('session.created', fun ?MODULE:on_session_created/3, [Env]),
     emqttd:hook('session.subscribed', fun ?MODULE:on_session_subscribed/4, [Env]),
     emqttd:hook('session.unsubscribed', fun ?MODULE:on_session_unsubscribed/4, [Env]),
+    emqttd:hook('session.terminated', fun ?MODULE:on_session_terminated/4, [Env]),
     emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
     emqttd:hook('message.delivered', fun ?MODULE:on_message_delivered/4, [Env]),
     emqttd:hook('message.acked', fun ?MODULE:on_message_acked/4, [Env]).
@@ -58,6 +60,9 @@ on_client_unsubscribe(ClientId, Username, TopicTable, _Env) ->
     io:format("client(~s/~s) unsubscribe ~p~n", [ClientId, Username, TopicTable]),
     {ok, TopicTable}.
 
+on_session_created(ClientId, Username, _Env) ->
+    io:format("session(~s/~s) created.", [ClientId, Username]).
+
 on_session_subscribed(ClientId, Username, {Topic, Opts}, _Env) ->
     io:format("session(~s/~s) subscribed: ~p~n", [Username, ClientId, {Topic, Opts}]),
     {ok, {Topic, Opts}}.
@@ -65,6 +70,9 @@ on_session_subscribed(ClientId, Username, {Topic, Opts}, _Env) ->
 on_session_unsubscribed(ClientId, Username, {Topic, Opts}, _Env) ->
     io:format("session(~s/~s) unsubscribed: ~p~n", [Username, ClientId, {Topic, Opts}]),
     ok.
+
+on_session_terminated(ClientId, Username, Reason, _Env) ->
+    io:format("session(~s/~s) terminated: ~p.", [ClientId, Username, Reason]).
 
 %% transform message and return
 on_message_publish(Message = #mqtt_message{topic = <<"$SYS/", _/binary>>}, _Env) ->
