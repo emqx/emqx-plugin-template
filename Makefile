@@ -3,7 +3,7 @@ PROJECT_DESCRIPTION = emqttd plugin template
 PROJECT_VERSION = 2.0
 
 DEPS = emqttd 
-dep_emqttd = git https://github.com/emqtt/emqttd emq20
+dep_emqttd = git https://github.com/emqtt/emqttd master
 
 COVER = true
 
