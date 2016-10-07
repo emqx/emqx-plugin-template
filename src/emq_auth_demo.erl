@@ -14,15 +14,20 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
--module(emqttd_cli_demo).
+-module(emq_auth_demo).
 
--include_lib("emqttd/include/emqttd_cli.hrl").
+-behaviour(emqttd_auth_mod).
 
--export([cmd/1]).
+-include_lib("emqttd/include/emqttd.hrl").
 
-cmd(["arg1", "arg2"]) ->
-    ?PRINT_MSG("ok");
+-export([init/1, check/3, description/0]).
 
-cmd(_) ->
-    ?USAGE([{"cmd arg1 arg2",  "cmd demo"}]).
+init(Opts) -> {ok, Opts}.
+
+check(#mqtt_client{client_id = ClientId, username = Username}, Password, _Opts) ->
+    io:format("Auth Demo: clientId=~p, username=~p, password=~p~n",
+              [ClientId, Username, Password]),
+    ok.
+
+description() -> "Auth Demo Module".
 

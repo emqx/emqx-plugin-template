@@ -14,20 +14,15 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
-%% @doc emqttd plugin template supervisor.
--module(emqttd_plugin_template_sup).
+-module(emq_cli_demo).
 
--behaviour(supervisor).
+-include_lib("emqttd/include/emqttd_cli.hrl").
 
-%% API
--export([start_link/0]).
+-export([cmd/1]).
 
-%% Supervisor callbacks
--export([init/1]).
+cmd(["arg1", "arg2"]) ->
+    ?PRINT_MSG("ok");
 
-start_link() ->
-    supervisor:start_link({local, ?MODULE}, ?MODULE, []).
-
-init([]) ->
-    {ok, { {one_for_one, 5, 10}, []} }.
+cmd(_) ->
+    ?USAGE([{"cmd arg1 arg2",  "cmd demo"}]).
 
