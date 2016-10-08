@@ -1,8 +1,8 @@
 
-emqttd_plugin_template
+emq_plugin_template
 ======================
 
-This is a template plugin for emqttd project.
+This is a template plugin for EMQ 3.0.
 
 Plugin Config
 -------------

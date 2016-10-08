@@ -1,5 +1,5 @@
-PROJECT = emqttd_plugin_template
-PROJECT_DESCRIPTION = emqttd Plugin Template
+PROJECT = emq_plugin_template
+PROJECT_DESCRIPTION = EMQ Plugin Template
 PROJECT_VERSION = 3.0
 
 BUILD_DEPS = emqttd
