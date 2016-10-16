@@ -1,9 +1,9 @@
 PROJECT = emq_plugin_template
 PROJECT_DESCRIPTION = EMQ Plugin Template
-PROJECT_VERSION = 3.0
+PROJECT_VERSION = 2.0
 
 BUILD_DEPS = emqttd
-dep_emqttd = git https://github.com/emqtt/emqttd emq30
+dep_emqttd = git https://github.com/emqtt/emqttd emq20
 
 TEST_DEPS = cuttlefish
 dep_cuttlefish = git https://github.com/basho/cuttlefish master
