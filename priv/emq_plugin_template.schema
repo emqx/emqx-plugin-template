@@ -1,3 +1,0 @@
-{mapping, "template.config", "emq_plugin_template.config", [
-  {datatype, string}
-]}.
