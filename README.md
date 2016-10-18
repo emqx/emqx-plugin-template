@@ -2,7 +2,7 @@
 emq_plugin_template
 ===================
 
-This is a template plugin for EMQ 3.0.
+This is a template plugin for the EMQ broker.
 
 Plugin Config
 -------------
