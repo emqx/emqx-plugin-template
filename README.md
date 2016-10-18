@@ -1,13 +1,13 @@
 
-emqttd_plugin_template
-======================
+emq_plugin_template
+===================
 
-This is a template plugin for emqttd project.
+This is a template plugin for the EMQ broker.
 
 Plugin Config
 -------------
 
-Each plugin should have a 'etc/{plugin_name}.conf' file to store application config.
+Each plugin should have a 'etc/{plugin_name}.conf|config' file to store application config.
 
 Authentication and ACL
 ----------------------

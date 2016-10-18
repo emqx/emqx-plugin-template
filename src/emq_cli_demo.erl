@@ -14,22 +14,15 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
--module(emqttd_acl_demo).
+-module(emq_cli_demo).
 
--include_lib("emqttd/include/emqttd.hrl").
+-include_lib("emqttd/include/emqttd_cli.hrl").
 
-%% ACL callbacks
--export([init/1, check_acl/2, reload_acl/1, description/0]).
+-export([cmd/1]).
 
-init(Opts) ->
-    {ok, Opts}.
+cmd(["arg1", "arg2"]) ->
+    ?PRINT_MSG("ok");
 
-check_acl({Client, PubSub, Topic}, _Opts) ->
-    io:format("ACL Demo: ~p ~p ~p~n", [Client, PubSub, Topic]),
-    allow.
+cmd(_) ->
+    ?USAGE([{"cmd arg1 arg2",  "cmd demo"}]).
 
-reload_acl(_Opts) ->
-    ok.
-
-description() -> "ACL Demo Module".
- 
