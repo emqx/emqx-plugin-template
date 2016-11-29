@@ -29,4 +29,6 @@ start(_StartType, _StartArgs) ->
     {ok, Sup}.
 
 stop(_State) ->
+    ok = emqttd_access_control:unregister_mod(auth, emq_auth_demo),
+    ok = emqttd_access_control:unregister_mod(acl, emq_acl_demo),
     emq_plugin_template:unload().
