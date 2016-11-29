@@ -1,6 +1,6 @@
 PROJECT = emq_plugin_template
 PROJECT_DESCRIPTION = EMQ Plugin Template
-PROJECT_VERSION = 2.0
+PROJECT_VERSION = 2.0.1
 
 BUILD_DEPS = emqttd
 dep_emqttd = git https://github.com/emqtt/emqttd emq20
