@@ -24,7 +24,6 @@ Plugin and Hooks
 
 [Hooks Design](http://docs.emqtt.com/en/latest/design.html#hooks-design)
 
-
 License
 -------
 
