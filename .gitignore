@@ -9,5 +9,5 @@ rel/example_project
 .concrete/DEV_MODE
 .rebar
 .erlang.mk/
-emqttd_plugin_template.d
 data/
+emq_plugin_template.d
