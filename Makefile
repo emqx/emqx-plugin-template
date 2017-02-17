@@ -6,6 +6,8 @@ BUILD_DEPS = emqttd cuttlefish
 dep_emqttd = git https://github.com/emqtt/emqttd master
 dep_cuttlefish = git https://github.com/emqtt/cuttlefish
 
+NO_AUTOPATCH = cuttlefish
+
 COVER = true
 
 include erlang.mk
