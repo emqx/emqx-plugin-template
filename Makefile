@@ -3,7 +3,7 @@ PROJECT_DESCRIPTION = EMQ Plugin Template
 PROJECT_VERSION = 2.3
 
 BUILD_DEPS = emqttd cuttlefish
-dep_emqttd = git https://github.com/emqtt/emqttd emq24
+dep_emqttd = git https://github.com/emqtt/emqttd master
 dep_cuttlefish = git https://github.com/emqtt/cuttlefish
 
 ERLC_OPTS += +debug_info
