@@ -14,22 +14,21 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
--module(emq_acl_demo).
+-module(emqx_plugin_template_app).
 
--include_lib("emqttd/include/emqttd.hrl").
+-behaviour(application).
 
-%% ACL callbacks
--export([init/1, check_acl/2, reload_acl/1, description/0]).
+%% Application callbacks
+-export([start/2, stop/1]).
 
-init(Opts) ->
-    {ok, Opts}.
+start(_StartType, _StartArgs) ->
+    {ok, Sup} = emqx_plugin_template_sup:start_link(),
+    ok = emqx_access_control:register_mod(auth, emqx_auth_demo, []),
+    ok = emqx_access_control:register_mod(acl, emqx_acl_demo, []),
+    emqx_plugin_template:load(application:get_all_env()),
+    {ok, Sup}.
 
-check_acl({Client, PubSub, Topic}, _Opts) ->
-    io:format("ACL Demo: ~p ~p ~p~n", [Client, PubSub, Topic]),
-    allow.
-
-reload_acl(_Opts) ->
-    ok.
-
-description() -> "ACL Demo Module".
- 
+stop(_State) ->
+    ok = emqx_access_control:unregister_mod(auth, emqx_auth_demo),
+    ok = emqx_access_control:unregister_mod(acl, emqx_acl_demo),
+    emqx_plugin_template:unload().
