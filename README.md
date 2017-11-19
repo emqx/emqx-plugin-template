@@ -1,5 +1,5 @@
 
-emq_plugin_template
+emq-plugin-template
 ===================
 
 This is a template plugin for the EMQ broker.
