@@ -3,7 +3,7 @@ PROJECT_DESCRIPTION = EMQ X Plugin Template
 PROJECT_VERSION = 2.3.0
 
 BUILD_DEPS = emqx cuttlefish
-dep_emqx = git git@github.com:emqx/emqx X
+dep_emqx = git git@github.com:emqx/emqx-enterprise
 dep_cuttlefish = git https://github.com/emqtt/cuttlefish
 
 ERLC_OPTS += +debug_info
