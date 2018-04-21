@@ -1,6 +1,6 @@
 PROJECT = emq_plugin_template
 PROJECT_DESCRIPTION = EMQ Plugin Template
-PROJECT_VERSION = 2.3.6
+PROJECT_VERSION = 2.3.7
 
 BUILD_DEPS = emqttd cuttlefish
 dep_emqttd = git https://github.com/emqtt/emqttd emq24
