@@ -4,6 +4,8 @@ emqx-plugin-template
 
 This is a template plugin for the EMQ X broker.
 
+TODO: Add a plugin development guide ...
+
 Plugin Config
 -------------
 
@@ -28,3 +30,8 @@ License
 -------
 
 Apache License Version 2.0
+
+Author
+------
+
+EMQ X Team.
