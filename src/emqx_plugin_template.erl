@@ -67,8 +67,8 @@ on_session_subscribed(#{client_id := ClientId}, Topic, SubOpts, _Env) ->
 on_session_unsubscribed(#{client_id := ClientId}, Topic, Opts, _Env) ->
     io:format("Session(~s) unsubscribe ~s with opts: ~p~n", [ClientId, Topic, Opts]).
 
-on_session_terminated(#{client_id := ClientId}, Reason, _Env) ->
-    io:format("Session(~s) terminated: ~p.", [ClientId, Reason]).
+on_session_terminated(#{client_id := ClientId}, ReasonCode, _Env) ->
+    io:format("Session(~s) terminated: ~p.", [ClientId, ReasonCode]).
 
 %% Transform message and return
 on_message_publish(Message = #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
