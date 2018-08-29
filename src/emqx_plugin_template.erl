@@ -29,8 +29,8 @@
 load(Env) ->
     emqx:hook('client.connected', fun ?MODULE:on_client_connected/4, [Env]),
     emqx:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
-    emqx:hook('client.subscribe', fun ?MODULE:on_client_subscribe/4, [Env]),
-    emqx:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/4, [Env]),
+    emqx:hook('client.subscribe', fun ?MODULE:on_client_subscribe/3, [Env]),
+    emqx:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/3, [Env]),
     emqx:hook('session.created', fun ?MODULE:on_session_created/3, [Env]),
     emqx:hook('session.resumed', fun ?MODULE:on_session_resumed/3, [Env]),
     emqx:hook('session.subscribed', fun ?MODULE:on_session_subscribed/4, [Env]),
@@ -86,9 +86,10 @@ on_message_acked(#{client := ClientId}, Message, _Env) ->
     io:format("Session(~s) acked message: ~s~n", [ClientId, emqx_message:format(Message)]),
     {ok, Message}.
 
+on_message_dropped(_By, #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
+    ok;
 on_message_dropped(#{node := Node}, Message, _Env) ->
     io:format("Message dropped by node ~s: ~s~n", [Node, emqx_message:format(Message)]);
-
 on_message_dropped(#{client_id := ClientId}, Message, _Env) ->
     io:format("Message dropped by client ~s: ~s~n", [ClientId, emqx_message:format(Message)]).
 
