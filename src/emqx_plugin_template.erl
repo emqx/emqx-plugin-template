@@ -82,7 +82,7 @@ on_message_delivered(#{client_id := ClientId}, Message, _Env) ->
     io:format("Delivered message to client(~s): ~s~n", [ClientId, emqx_message:format(Message)]),
     {ok, Message}.
 
-on_message_acked(#{client := ClientId}, Message, _Env) ->
+on_message_acked(#{client_id := ClientId}, Message, _Env) ->
     io:format("Session(~s) acked message: ~s~n", [ClientId, emqx_message:format(Message)]),
     {ok, Message}.
 
