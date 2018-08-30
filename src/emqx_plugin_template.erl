@@ -41,8 +41,8 @@ load(Env) ->
     emqx:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]),
     emqx:hook('message.dropped', fun ?MODULE:on_message_dropped/3, [Env]).
 
-on_client_connected(#{client_id := ClientId}, ConnAck, ConnInfo, _Env) ->
-    io:format("Client(~s) connected, connack: ~w, conninfo:~p~n", [ClientId, ConnAck, ConnInfo]).
+on_client_connected(#{client_id := ClientId}, ConnAck, ConnAttrs, _Env) ->
+    io:format("Client(~s) connected, connack: ~w, conn_attrs:~p~n", [ClientId, ConnAck, ConnAttrs]).
 
 on_client_disconnected(#{client_id := ClientId}, ReasonCode, _Env) ->
     io:format("Client(~s) disconnected, reason_code: ~w~n", [ClientId, ReasonCode]).
@@ -55,11 +55,11 @@ on_client_unsubscribe(#{client_id := ClientId}, RawTopicFilters, _Env) ->
     io:format("Client(~s) unsubscribe ~p~n", [ClientId, RawTopicFilters]),
     {ok, RawTopicFilters}.
 
-on_session_created(#{client_id := ClientId}, SessInfo, _Env) ->
-    io:format("Session(~s) created: ~p~n", [ClientId, SessInfo]).
+on_session_created(#{client_id := ClientId}, SessAttrs, _Env) ->
+    io:format("Session(~s) created: ~p~n", [ClientId, SessAttrs]).
 
-on_session_resumed(#{client_id := ClientId}, SessInfo, _Env) ->
-    io:format("Session(~s) resumed: ~p~n", [ClientId, SessInfo]).
+on_session_resumed(#{client_id := ClientId}, SessAttrs, _Env) ->
+    io:format("Session(~s) resumed: ~p~n", [ClientId, SessAttrs]).
 
 on_session_subscribed(#{client_id := ClientId}, Topic, SubOpts, _Env) ->
     io:format("Session(~s) subscribe ~s with subopts: ~p~n", [ClientId, Topic, SubOpts]).
