@@ -7,7 +7,6 @@ dep_emqx = git https://github.com/emqtt/emqttd emqx30
 dep_cuttlefish = git https://github.com/emqx/cuttlefish
 
 ERLC_OPTS += +debug_info
-ERLC_OPTS += +'{parse_transform, lager_transform}'
 
 NO_AUTOPATCH = cuttlefish
 
