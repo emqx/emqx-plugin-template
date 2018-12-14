@@ -12,3 +12,4 @@ rel/example_project
 data/
 emqx_plugin_template.d
 .DS_Store
+erlang.mk
