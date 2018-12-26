@@ -1,8 +1,10 @@
 
-emq-plugin-template
-===================
+emqx-plugin-template
+====================
 
-This is a template plugin for the EMQ broker.
+This is a template plugin for the EMQ X broker.
+
+TODO: Add a plugin development guide ...
 
 Plugin Config
 -------------
@@ -13,8 +15,8 @@ Authentication and ACL
 ----------------------
 
 ```
-emqttd_access_control:register_mod(auth, ?MODULE, Env).
-emqttd_access_control:register_mod(acl, ?MODULE, Env).
+emqx_access_control:register_mod(auth, ?MODULE, Env).
+emqx_access_control:register_mod(acl, ?MODULE, Env).
 ```
 
 Plugin and Hooks
@@ -28,3 +30,8 @@ License
 -------
 
 Apache License Version 2.0
+
+Author
+------
+
+EMQ X Team.
