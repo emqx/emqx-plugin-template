@@ -1,6 +1,6 @@
 PROJECT = emqx_plugin_template
 PROJECT_DESCRIPTION = EMQ X Plugin Template
-PROJECT_VERSION = 3.0
+PROJECT_VERSION = 3.1
 
 BUILD_DEPS = emqx cuttlefish
 dep_emqx = git-emqx https://github.com/emqx/emqx testing
