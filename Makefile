@@ -1,6 +1,5 @@
 PROJECT = emqx_plugin_template
 PROJECT_DESCRIPTION = EMQ X Plugin Template
-PROJECT_VERSION = 3.1
 
 CUR_BRANCH := $(shell git branch | grep -e "^*" | cut -d' ' -f 2)
 BRANCH := $(if $(filter $(CUR_BRANCH), master develop testing), $(CUR_BRANCH), testing)
