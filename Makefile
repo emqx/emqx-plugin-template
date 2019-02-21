@@ -1,9 +1,12 @@
 PROJECT = emqx_plugin_template
 PROJECT_DESCRIPTION = EMQ X Plugin Template
-PROJECT_VERSION = 3.0
+
+CUR_BRANCH := $(shell git branch | grep -e "^*" | cut -d' ' -f 2)
+BRANCH := $(if $(filter $(CUR_BRANCH), master develop), $(CUR_BRANCH))
 
 BUILD_DEPS = emqx cuttlefish
-dep_emqx = git-emqx https://github.com/emqx/emqx master
+
+dep_emqx = git-emqx https://github.com/emqx/emqx $(BRANCH)
 dep_cuttlefish = git-emqx https://github.com/emqx/cuttlefish v2.2.1
 
 ERLC_OPTS += +debug_info
