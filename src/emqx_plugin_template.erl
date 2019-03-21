@@ -46,7 +46,7 @@ load(Env) ->
 
 on_client_authenticate(Credentials = #{client_id := ClientId, password := Password}, _Env) ->
     io:format("Client(~s) authenticate, Password:~p ~n", [ClientId, Password]),
-    {stop, Credentials#{result => success}}.
+    {stop, Credentials#{auth_result => success}}.
 
 on_client_check_acl(#{client_id := ClientId}, PubSub, Topic, DefaultACLResult, _Env) ->
     io:format("Client(~s) authenticate, PubSub:~p, Topic:~p, DefaultACLResult:~p~n",
