@@ -16,7 +16,11 @@
 
 -behaviour(application).
 
--export([start/2, stop/1]).
+-emqx_plugin(?MODULE).
+
+-export([ start/2
+        , stop/1
+        ]).
 
 start(_StartType, _StartArgs) ->
     {ok, Sup} = emqx_plugin_template_sup:start_link(),

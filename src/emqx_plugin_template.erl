@@ -16,15 +16,27 @@
 
 -include_lib("emqx/include/emqx.hrl").
 
--export([load/1, unload/0]).
+-export([ load/1
+        , unload/0
+        ]).
 
 %% Hooks functions
--export([on_client_authenticate/2, on_client_check_acl/5]).
--export([on_client_connected/4, on_client_disconnected/3]).
--export([on_client_subscribe/3, on_client_unsubscribe/3]).
--export([on_session_created/3, on_session_resumed/3, on_session_terminated/3]).
--export([on_session_subscribed/4, on_session_unsubscribed/4]).
--export([on_message_publish/2, on_message_deliver/3, on_message_acked/3, on_message_dropped/3]).
+-export([ on_client_authenticate/2
+        , on_client_check_acl/5
+        , on_client_connected/4
+        , on_client_disconnected/3
+        , on_client_subscribe/3
+        , on_client_unsubscribe/3
+        , on_session_created/3
+        , on_session_resumed/3
+        , on_session_terminated/3
+        , on_session_subscribed/4
+        , on_session_unsubscribed/4
+        , on_message_publish/2
+        , on_message_deliver/3
+        , on_message_acked/3
+        , on_message_dropped/3
+        ]).
 
 %% Called when the plugin application start
 load(Env) ->
@@ -46,7 +58,7 @@ load(Env) ->
 
 on_client_authenticate(Credentials = #{client_id := ClientId, password := Password}, _Env) ->
     io:format("Client(~s) authenticate, Password:~p ~n", [ClientId, Password]),
-    {stop, Credentials#{result => success}}.
+    {stop, Credentials#{auth_result => success}}.
 
 on_client_check_acl(#{client_id := ClientId}, PubSub, Topic, DefaultACLResult, _Env) ->
     io:format("Client(~s) authenticate, PubSub:~p, Topic:~p, DefaultACLResult:~p~n",
