@@ -2,9 +2,7 @@
 emqx-plugin-template
 ====================
 
-This is a template plugin for the EMQ X broker.
-
-TODO: Add a plugin development guide ...
+This is a template plugin for the EMQ X broker. And you can see [Plugin Development Guide](https://developer.emqx.io/docs/emq/v3/en/plugins.html#plugin-development-guide) to learning how to use it.
 
 Plugin Config
 -------------
@@ -15,16 +13,16 @@ Authentication and ACL
 ----------------------
 
 ```
-emqx_access_control:register_mod(auth, ?MODULE, Env).
-emqx_access_control:register_mod(acl, ?MODULE, Env).
+emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/2, [Env]).
+emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]).
 ```
 
 Plugin and Hooks
 -----------------
 
-[Plugin Design](http://docs.emqtt.com/en/latest/design.html#plugin-design)
+[Plugin Design](https://developer.emqx.io/docs/emq/v3/en/design.html#plugin-design)
 
-[Hooks Design](http://docs.emqtt.com/en/latest/design.html#hooks-design)
+[Hooks Design](https://developer.emqx.io/docs/emq/v3/en/design.html#hooks-design)
 
 License
 -------
