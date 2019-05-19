@@ -1,24 +1,34 @@
-PROJECT = emqx_plugin_template
-PROJECT_DESCRIPTION = EMQ X Plugin Template
+## shallow clone for speed
 
-CUR_BRANCH := $(shell git branch | grep -e "^*" | cut -d' ' -f 2)
-BRANCH := $(if $(filter $(CUR_BRANCH), master develop), $(CUR_BRANCH), develop)
+REBAR_GIT_CLONE_OPTIONS += --depth 1
+export REBAR_GIT_CLONE_OPTIONS
 
-BUILD_DEPS = emqx cuttlefish
-dep_emqx = git-emqx https://github.com/emqx/emqx $(BRANCH)
-dep_cuttlefish = git-emqx https://github.com/emqx/cuttlefish v2.2.1
+REBAR = rebar3
+all: compile
 
-ERLC_OPTS += +debug_info
+compile:
+	$(REBAR) compile
 
-NO_AUTOPATCH = cuttlefish
+ct: compile
+	$(REBAR) as test ct -v
 
-COVER = true
+eunit: compile
+	$(REBAR) as test eunit
 
-$(shell [ -f erlang.mk ] || curl -s -o erlang.mk https://raw.githubusercontent.com/emqx/erlmk/master/erlang.mk)
+xref:
+	$(REBAR) xref
 
-include erlang.mk
+clean: distclean
 
-app:: rebar.config
+distclean:
+	@rm -rf _build
+	@rm -f data/app.*.config data/vm.*.args rebar.lock
 
-app.config::
-	./deps/cuttlefish/cuttlefish -l info -e etc/ -c etc/emqx_plugin_template.conf -i priv/emqx_plugin_template.schema -d data
+CUTTLEFISH_SCRIPT = _build/default/lib/cuttlefish/cuttlefish
+
+$(CUTTLEFISH_SCRIPT):
+	@${REBAR} get-deps
+	@if [ ! -f cuttlefish ]; then make -C _build/default/lib/cuttlefish; fi
+
+app.config: $(CUTTLEFISH_SCRIPT)
+	$(verbose) $(CUTTLEFISH_SCRIPT) -l info -e etc/ -c etc/emqx_plugin_template.conf -i priv/emqx_plugin_template.schema -d data
