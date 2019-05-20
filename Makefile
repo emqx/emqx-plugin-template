@@ -23,12 +23,3 @@ clean: distclean
 distclean:
 	@rm -rf _build
 	@rm -f data/app.*.config data/vm.*.args rebar.lock
-
-CUTTLEFISH_SCRIPT = _build/default/lib/cuttlefish/cuttlefish
-
-$(CUTTLEFISH_SCRIPT):
-	@${REBAR} get-deps
-	@if [ ! -f cuttlefish ]; then make -C _build/default/lib/cuttlefish; fi
-
-app.config: $(CUTTLEFISH_SCRIPT)
-	$(verbose) $(CUTTLEFISH_SCRIPT) -l info -e etc/ -c etc/emqx_plugin_template.conf -i priv/emqx_plugin_template.schema -d data
