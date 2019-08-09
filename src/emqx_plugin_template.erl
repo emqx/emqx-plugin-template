@@ -25,8 +25,8 @@
         , on_client_check_acl/5
         , on_client_connected/4
         , on_client_disconnected/3
-        , on_client_subscribe/3
-        , on_client_unsubscribe/3
+        , on_client_subscribe/4
+        , on_client_unsubscribe/4
         , on_session_created/3
         , on_session_resumed/3
         , on_session_terminated/3
@@ -44,8 +44,8 @@ load(Env) ->
     emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]),
     emqx:hook('client.connected', fun ?MODULE:on_client_connected/4, [Env]),
     emqx:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
-    emqx:hook('client.subscribe', fun ?MODULE:on_client_subscribe/3, [Env]),
-    emqx:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/3, [Env]),
+    emqx:hook('client.subscribe', fun ?MODULE:on_client_subscribe/4, [Env]),
+    emqx:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/4, [Env]),
     emqx:hook('session.created', fun ?MODULE:on_session_created/3, [Env]),
     emqx:hook('session.resumed', fun ?MODULE:on_session_resumed/3, [Env]),
     emqx:hook('session.subscribed', fun ?MODULE:on_session_subscribed/4, [Env]),
@@ -71,11 +71,11 @@ on_client_connected(#{client_id := ClientId}, ConnAck, ConnAttrs, _Env) ->
 on_client_disconnected(#{client_id := ClientId}, ReasonCode, _Env) ->
     io:format("Client(~s) disconnected, reason_code: ~w~n", [ClientId, ReasonCode]).
 
-on_client_subscribe(#{client_id := ClientId}, RawTopicFilters, _Env) ->
+on_client_subscribe(#{client_id := ClientId}, _Properties, RawTopicFilters, _Env) ->
     io:format("Client(~s) will subscribe: ~p~n", [ClientId, RawTopicFilters]),
     {ok, RawTopicFilters}.
 
-on_client_unsubscribe(#{client_id := ClientId}, RawTopicFilters, _Env) ->
+on_client_unsubscribe(#{client_id := ClientId}, _Properties, RawTopicFilters, _Env) ->
     io:format("Client(~s) unsubscribe ~p~n", [ClientId, RawTopicFilters]),
     {ok, RawTopicFilters}.
 
@@ -123,8 +123,8 @@ unload() ->
     emqx:unhook('client.check_acl', fun ?MODULE:on_client_check_acl/5),
     emqx:unhook('client.connected', fun ?MODULE:on_client_connected/4),
     emqx:unhook('client.disconnected', fun ?MODULE:on_client_disconnected/3),
-    emqx:unhook('client.subscribe', fun ?MODULE:on_client_subscribe/3),
-    emqx:unhook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/3),
+    emqx:unhook('client.subscribe', fun ?MODULE:on_client_subscribe/4),
+    emqx:unhook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/4),
     emqx:unhook('session.created', fun ?MODULE:on_session_created/3),
     emqx:unhook('session.resumed', fun ?MODULE:on_session_resumed/3),
     emqx:unhook('session.subscribed', fun ?MODULE:on_session_subscribed/4),
