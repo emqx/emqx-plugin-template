@@ -19,8 +19,8 @@
 -export([cmd/1]).
 
 cmd(["arg1", "arg2"]) ->
-    emqx_mgmt:print("ok");
+    emqx_ctl:print("ok");
 
 cmd(_) ->
-    emqx_mgmt:usage([{"cmd arg1 arg2", "cmd demo"}]).
+    emqx_ctl:usage([{"cmd arg1 arg2", "cmd demo"}]).
 
