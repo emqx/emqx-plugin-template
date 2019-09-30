@@ -58,42 +58,42 @@ load(Env) ->
     emqx:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]),
     emqx:hook('message.dropped', fun ?MODULE:on_message_dropped/3, [Env]).
 
-on_client_authenticate(Credentials = #{client_id := ClientId, password := Password}, _Env) ->
+on_client_authenticate(ClientInfo = #{clientid := ClientId, password := Password}, _Env) ->
     io:format("Client(~s) authenticate, Password:~p ~n", [ClientId, Password]),
-    {stop, Credentials#{auth_result => success}}.
+    {stop, ClientInfo#{auth_result => success}}.
 
-on_client_check_acl(#{client_id := ClientId}, PubSub, Topic, DefaultACLResult, _Env) ->
+on_client_check_acl(#{clientid := ClientId}, PubSub, Topic, DefaultACLResult, _Env) ->
     io:format("Client(~s) authenticate, PubSub:~p, Topic:~p, DefaultACLResult:~p~n",
-             [ClientId, PubSub, Topic, DefaultACLResult]),
+              [ClientId, PubSub, Topic, DefaultACLResult]),
     {stop, allow}.
 
-on_client_connected(#{client_id := ClientId}, ConnAck, ConnAttrs, _Env) ->
+on_client_connected(#{clientid := ClientId}, ConnAck, ConnAttrs, _Env) ->
     io:format("Client(~s) connected, connack: ~w, conn_attrs:~p~n", [ClientId, ConnAck, ConnAttrs]).
 
-on_client_disconnected(#{client_id := ClientId}, ReasonCode, _Env) ->
+on_client_disconnected(#{clientid := ClientId}, ReasonCode, _Env) ->
     io:format("Client(~s) disconnected, reason_code: ~w~n", [ClientId, ReasonCode]).
 
-on_client_subscribe(#{client_id := ClientId}, _Properties, RawTopicFilters, _Env) ->
+on_client_subscribe(#{clientid := ClientId}, _Properties, RawTopicFilters, _Env) ->
     io:format("Client(~s) will subscribe: ~p~n", [ClientId, RawTopicFilters]),
     {ok, RawTopicFilters}.
 
-on_client_unsubscribe(#{client_id := ClientId}, _Properties, RawTopicFilters, _Env) ->
+on_client_unsubscribe(#{clientid := ClientId}, _Properties, RawTopicFilters, _Env) ->
     io:format("Client(~s) unsubscribe ~p~n", [ClientId, RawTopicFilters]),
     {ok, RawTopicFilters}.
 
-on_session_created(#{client_id := ClientId}, SessAttrs, _Env) ->
+on_session_created(#{clientid := ClientId}, SessAttrs, _Env) ->
     io:format("Session(~s) created: ~p~n", [ClientId, SessAttrs]).
 
-on_session_resumed(#{client_id := ClientId}, SessAttrs, _Env) ->
+on_session_resumed(#{clientid := ClientId}, SessAttrs, _Env) ->
     io:format("Session(~s) resumed: ~p~n", [ClientId, SessAttrs]).
 
-on_session_subscribed(#{client_id := ClientId}, Topic, SubOpts, _Env) ->
+on_session_subscribed(#{clientid := ClientId}, Topic, SubOpts, _Env) ->
     io:format("Session(~s) subscribe ~s with subopts: ~p~n", [ClientId, Topic, SubOpts]).
 
-on_session_unsubscribed(#{client_id := ClientId}, Topic, Opts, _Env) ->
+on_session_unsubscribed(#{clientid := ClientId}, Topic, Opts, _Env) ->
     io:format("Session(~s) unsubscribe ~s with opts: ~p~n", [ClientId, Topic, Opts]).
 
-on_session_terminated(#{client_id := ClientId}, ReasonCode, _Env) ->
+on_session_terminated(#{clientid := ClientId}, ReasonCode, _Env) ->
     io:format("Session(~s) terminated: ~p.", [ClientId, ReasonCode]).
 
 %% Transform message and return
@@ -104,11 +104,11 @@ on_message_publish(Message, _Env) ->
     io:format("Publish ~s~n", [emqx_message:format(Message)]),
     {ok, Message}.
 
-on_message_deliver(#{client_id := ClientId}, Message, _Env) ->
+on_message_deliver(#{clientid := ClientId}, Message, _Env) ->
     io:format("Deliver message to client(~s): ~s~n", [ClientId, emqx_message:format(Message)]),
     {ok, Message}.
 
-on_message_acked(#{client_id := ClientId}, Message, _Env) ->
+on_message_acked(#{clientid := ClientId}, Message, _Env) ->
     io:format("Session(~s) acked message: ~s~n", [ClientId, emqx_message:format(Message)]),
     {ok, Message}.
 
@@ -116,7 +116,7 @@ on_message_dropped(_By, #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
     ok;
 on_message_dropped(#{node := Node}, Message, _Env) ->
     io:format("Message dropped by node ~s: ~s~n", [Node, emqx_message:format(Message)]);
-on_message_dropped(#{client_id := ClientId}, Message, _Env) ->
+on_message_dropped(#{clientid := ClientId}, Message, _Env) ->
     io:format("Message dropped by client ~s: ~s~n", [ClientId, emqx_message:format(Message)]).
 
 %% Called when the plugin application stop
