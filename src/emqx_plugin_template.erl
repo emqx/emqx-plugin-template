@@ -23,54 +23,50 @@
         ]).
 
 %% Hooks functions
--export([ on_client_authenticate/2
+-export([ on_client_authenticate/3
         , on_client_check_acl/5
         , on_client_connected/4
-        , on_client_disconnected/3
+        , on_client_disconnected/4
         , on_client_subscribe/4
         , on_client_unsubscribe/4
-        , on_session_created/3
         , on_session_resumed/3
-        , on_session_terminated/3
         , on_session_subscribed/4
         , on_session_unsubscribed/4
         , on_message_publish/2
-        , on_message_deliver/3
+        , on_message_delivered/3
         , on_message_acked/3
         , on_message_dropped/3
         ]).
 
 %% Called when the plugin application start
 load(Env) ->
-    emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/2, [Env]),
+    emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/3, [Env]),
     emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]),
     emqx:hook('client.connected', fun ?MODULE:on_client_connected/4, [Env]),
-    emqx:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
+    emqx:hook('client.disconnected', fun ?MODULE:on_client_disconnected/4, [Env]),
     emqx:hook('client.subscribe', fun ?MODULE:on_client_subscribe/4, [Env]),
     emqx:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/4, [Env]),
-    emqx:hook('session.created', fun ?MODULE:on_session_created/3, [Env]),
     emqx:hook('session.resumed', fun ?MODULE:on_session_resumed/3, [Env]),
     emqx:hook('session.subscribed', fun ?MODULE:on_session_subscribed/4, [Env]),
     emqx:hook('session.unsubscribed', fun ?MODULE:on_session_unsubscribed/4, [Env]),
-    emqx:hook('session.terminated', fun ?MODULE:on_session_terminated/3, [Env]),
     emqx:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
-    emqx:hook('message.deliver', fun ?MODULE:on_message_deliver/3, [Env]),
+    emqx:hook('message.delivered', fun ?MODULE:on_message_delivered/3, [Env]),
     emqx:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]),
     emqx:hook('message.dropped', fun ?MODULE:on_message_dropped/3, [Env]).
 
-on_client_authenticate(ClientInfo = #{clientid := ClientId, password := Password}, _Env) ->
+on_client_authenticate(ClientInfo = #{clientid := ClientId, password := Password}, AuthResult,_Env) ->
     io:format("Client(~s) authenticate, Password:~p ~n", [ClientId, Password]),
-    {stop, ClientInfo#{auth_result => success}}.
+    {stop, AuthResult#{auth_result => success, anonymous => false}}.
 
 on_client_check_acl(#{clientid := ClientId}, PubSub, Topic, DefaultACLResult, _Env) ->
-    io:format("Client(~s) authenticate, PubSub:~p, Topic:~p, DefaultACLResult:~p~n",
+    io:format("Client(~s) check_acl, PubSub:~p, Topic:~p, DefaultACLResult:~p~n",
               [ClientId, PubSub, Topic, DefaultACLResult]),
     {stop, allow}.
 
-on_client_connected(#{clientid := ClientId}, ConnAck, ConnAttrs, _Env) ->
-    io:format("Client(~s) connected, connack: ~w, conn_attrs:~p~n", [ClientId, ConnAck, ConnAttrs]).
+on_client_connected(#{clientid := ClientId}, ConnAck, _ConnInfo, _Env) ->
+    io:format("Client(~s) connected, connack: ~w~n", [ClientId, ConnAck]).
 
-on_client_disconnected(#{clientid := ClientId}, ReasonCode, _Env) ->
+on_client_disconnected(#{clientid := ClientId}, ReasonCode, _ConnInfo, _Env) ->
     io:format("Client(~s) disconnected, reason_code: ~w~n", [ClientId, ReasonCode]).
 
 on_client_subscribe(#{clientid := ClientId}, _Properties, RawTopicFilters, _Env) ->
@@ -81,9 +77,6 @@ on_client_unsubscribe(#{clientid := ClientId}, _Properties, RawTopicFilters, _En
     io:format("Client(~s) unsubscribe ~p~n", [ClientId, RawTopicFilters]),
     {ok, RawTopicFilters}.
 
-on_session_created(#{clientid := ClientId}, SessAttrs, _Env) ->
-    io:format("Session(~s) created: ~p~n", [ClientId, SessAttrs]).
-
 on_session_resumed(#{clientid := ClientId}, SessAttrs, _Env) ->
     io:format("Session(~s) resumed: ~p~n", [ClientId, SessAttrs]).
 
@@ -93,9 +86,6 @@ on_session_subscribed(#{clientid := ClientId}, Topic, SubOpts, _Env) ->
 on_session_unsubscribed(#{clientid := ClientId}, Topic, Opts, _Env) ->
     io:format("Session(~s) unsubscribe ~s with opts: ~p~n", [ClientId, Topic, Opts]).
 
-on_session_terminated(#{clientid := ClientId}, ReasonCode, _Env) ->
-    io:format("Session(~s) terminated: ~p.", [ClientId, ReasonCode]).
-
 %% Transform message and return
 on_message_publish(Message = #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
     {ok, Message};
@@ -104,7 +94,7 @@ on_message_publish(Message, _Env) ->
     io:format("Publish ~s~n", [emqx_message:format(Message)]),
     {ok, Message}.
 
-on_message_deliver(#{clientid := ClientId}, Message, _Env) ->
+on_message_delivered(#{clientid := ClientId}, Message, _Env) ->
     io:format("Deliver message to client(~s): ~s~n", [ClientId, emqx_message:format(Message)]),
     {ok, Message}.
 
@@ -121,19 +111,17 @@ on_message_dropped(#{clientid := ClientId}, Message, _Env) ->
 
 %% Called when the plugin application stop
 unload() ->
-    emqx:unhook('client.authenticate', fun ?MODULE:on_client_authenticate/2),
+    emqx:unhook('client.authenticate', fun ?MODULE:on_client_authenticate/3),
     emqx:unhook('client.check_acl', fun ?MODULE:on_client_check_acl/5),
     emqx:unhook('client.connected', fun ?MODULE:on_client_connected/4),
-    emqx:unhook('client.disconnected', fun ?MODULE:on_client_disconnected/3),
+    emqx:unhook('client.disconnected', fun ?MODULE:on_client_disconnected/4),
     emqx:unhook('client.subscribe', fun ?MODULE:on_client_subscribe/4),
     emqx:unhook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/4),
-    emqx:unhook('session.created', fun ?MODULE:on_session_created/3),
     emqx:unhook('session.resumed', fun ?MODULE:on_session_resumed/3),
     emqx:unhook('session.subscribed', fun ?MODULE:on_session_subscribed/4),
     emqx:unhook('session.unsubscribed', fun ?MODULE:on_session_unsubscribed/4),
-    emqx:unhook('session.terminated', fun ?MODULE:on_session_terminated/3),
     emqx:unhook('message.publish', fun ?MODULE:on_message_publish/2),
-    emqx:unhook('message.deliver', fun ?MODULE:on_message_deliver/3),
+    emqx:unhook('message.delivered', fun ?MODULE:on_message_delivered/3),
     emqx:unhook('message.acked', fun ?MODULE:on_message_acked/3),
     emqx:unhook('message.dropped', fun ?MODULE:on_message_dropped/3).
 
