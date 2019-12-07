@@ -16,3 +16,4 @@ erlang.mk
 _build/
 rebar.lock
 test/ct.cover.spec
+.rebar3

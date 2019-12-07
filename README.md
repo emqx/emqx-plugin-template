@@ -13,7 +13,7 @@ Authentication and ACL
 ----------------------
 
 ```
-emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/2, [Env]).
+emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/3, [Env]).
 emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]).
 ```
 
