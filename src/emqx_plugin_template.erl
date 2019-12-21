@@ -54,7 +54,7 @@ load(Env) ->
     emqx:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]),
     emqx:hook('message.dropped', fun ?MODULE:on_message_dropped/3, [Env]).
 
-on_client_authenticate(ClientInfo = #{clientid := ClientId, password := Password}, AuthResult,_Env) ->
+on_client_authenticate(_ClientInfo = #{clientid := ClientId, password := Password}, AuthResult,_Env) ->
     io:format("Client(~s) authenticate, Password:~p ~n", [ClientId, Password]),
     {stop, AuthResult#{auth_result => success, anonymous => false}}.
 
