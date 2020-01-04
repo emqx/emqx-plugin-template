@@ -13,7 +13,6 @@ jobs:
             - uses: actions/checkout@v1
             - name: run test cases
               run: |
-                make xref
                 make eunit  
                 make ct
                 make cover
