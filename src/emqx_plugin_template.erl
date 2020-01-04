@@ -24,7 +24,7 @@
 
 %% Client Lifecircle Hooks
 -export([ on_client_connect/3
-        , on_client_connack/3
+        , on_client_connack/4
         , on_client_connected/3
         , on_client_disconnected/4
         , on_client_authenticate/3
@@ -80,15 +80,15 @@ load(Env) ->
 %% Client Lifecircle Hooks
 %%--------------------------------------------------------------------
 
-on_client_connect(ConnInfo = #{clientid := ClientId}, ConnPkt, _Env) ->
-    io:format("Client(~s) connect, ConnInfo: ~p, ConnPkt: ~p~n",
-              [ClientId, ConnInfo, ConnPkt]),
-    {ok, ConnPkt}.
+on_client_connect(ConnInfo = #{clientid := ClientId}, Props, _Env) ->
+    io:format("Client(~s) connect, ConnInfo: ~p, Props: ~p~n",
+              [ClientId, ConnInfo, Props]),
+    {ok, Props}.
 
-on_client_connack(ConnInfo = #{clientid := ClientId}, ConnAck, _Env) ->
-    io:format("Client(~s) connack, ConnInfo: ~p, ConnAck: ~p~n",
-              [ClientId, ConnInfo, ConnAck]),
-    {ok, ConnAck}.
+on_client_connack(ConnInfo = #{clientid := ClientId}, Rc, Props, _Env) ->
+    io:format("Client(~s) connack, ConnInfo: ~p, Rc: ~p, Props: ~p~n",
+              [ClientId, ConnInfo, Rc, Props]),
+    {ok, Props}.
 
 on_client_connected(ClientInfo = #{clientid := ClientId}, ConnInfo, _Env) ->
     io:format("Client(~s) connected, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
