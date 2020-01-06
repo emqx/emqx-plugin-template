@@ -50,9 +50,6 @@
         , on_message_dropped/4
         ]).
 
-%% Delivery Hooks
--export([on_delivery_dropped/4]).
-
 %% Called when the plugin application start
 load(Env) ->
     emqx:hook('client.connect',      {?MODULE, on_client_connect, [Env]}),
@@ -73,8 +70,7 @@ load(Env) ->
     emqx:hook('message.publish',     {?MODULE, on_message_publish, [Env]}),
     emqx:hook('message.delivered',   {?MODULE, on_message_delivered, [Env]}),
     emqx:hook('message.acked',       {?MODULE, on_message_acked, [Env]}),
-    emqx:hook('message.dropped',     {?MODULE, on_message_dropped, [Env]}),
-    emqx:hook('delivery.dropped',    {?MODULE, on_delivery_dropped, [Env]}).
+    emqx:hook('message.dropped',     {?MODULE, on_message_dropped, [Env]}).
 
 %%--------------------------------------------------------------------
 %% Client Lifecircle Hooks
@@ -168,14 +164,6 @@ on_message_acked(_ClientInfo = #{clientid := ClientId}, Message, _Env) ->
     io:format("Message acked by client(~s): ~s~n",
               [ClientId, emqx_message:format(Message)]).
 
-%%--------------------------------------------------------------------
-%% Delivery Hooks
-%%--------------------------------------------------------------------
-
-on_delivery_dropped(_ClientInfo = #{clientid := ClientId}, Message, Reason, _Env) ->
-    io:format("Delivery to ~s is dropped due to ~s: ~s~n",
-              [ClientId, Reason, emqx_message:format(Message)]).
-
 %% Called when the plugin application stop
 unload() ->
     emqx:unhook('client.connect',      {?MODULE, on_client_connect}),
@@ -196,6 +184,5 @@ unload() ->
     emqx:unhook('message.publish',     {?MODULE, on_message_publish}),
     emqx:unhook('message.delivered',   {?MODULE, on_message_delivered}),
     emqx:unhook('message.acked',       {?MODULE, on_message_acked}),
-    emqx:unhook('message.dropped',     {?MODULE, on_message_dropped}),
-    emqx:unhook('delivery.dropped',    {?MODULE, on_delivery_dropped}).
+    emqx:unhook('message.dropped',     {?MODULE, on_message_dropped}).
 
