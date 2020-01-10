@@ -18,6 +18,9 @@ eunit: compile
 xref:
 	$(REBAR) xref
 
+cover:
+	$(REBAR) cover
+
 clean: distclean
 
 distclean:
