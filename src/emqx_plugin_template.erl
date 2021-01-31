@@ -76,10 +76,25 @@ load(Env) ->
 %% Client Lifecircle Hooks
 %%--------------------------------------------------------------------
 
+on_client_connect_redis(ConnInfo = #{clientid := ClientId}, Props, _Env) ->
+  RedisPool = {single,emqx_backend_redis_pool1},
+  io:format("Redis called\n"),
+  emqx_backend_redis:on_client_connected(#{clientid => ClientId}, ConnInfo, {undefined,RedisPool}),
+  io:format("Redis executed\n").
+
+on_client_connect_mysql(ConnInfo = #{clientid := ClientId}, Props, _Env) ->
+  MysqlPool = emqx_backend_mysql_pool1,
+  io:format("Mysql called\n"),
+  emqx_backend_mysql:on_client_connected(#{clientid => ClientId}, ConnInfo, {undefined,MysqlPool}),
+  io:format("Mysql executed\n").
+
 on_client_connect(ConnInfo = #{clientid := ClientId}, Props, _Env) ->
-    io:format("Client(~s) connect, ConnInfo: ~p, Props: ~p~n",
-              [ClientId, ConnInfo, Props]),
-    {ok, Props}.
+  io:format("Plugin template :: Client(~s) connect, ConnInfo: ~p, Props: ~p~n",
+    [ClientId, ConnInfo, Props]),
+  on_client_connect_redis(ConnInfo, Props, _Env),
+  on_client_connect_mysql(ConnInfo, Props, _Env),
+%%    emqx_backend_mysql:on_client_connected(ClientId, ConnInfo, {undefined,emqx_backend_mysql_pool1}),
+  {ok, Props}.
 
 on_client_connack(ConnInfo = #{clientid := ClientId}, Rc, Props, _Env) ->
     io:format("Client(~s) connack, ConnInfo: ~p, Rc: ~p, Props: ~p~n",
