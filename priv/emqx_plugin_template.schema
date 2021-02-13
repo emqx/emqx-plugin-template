@@ -1,0 +1,38 @@
+%%-*- mode: erlang -*-
+%% emqx_plugin_template config mapping
+
+{mapping, "backend.template.hook.client.connected.$name", "emqx_plugin_template.hooks", [
+  {datatype, string}
+]}.
+
+{mapping, "backend.template.hook.client.disconnected.$name", "emqx_plugin_template.hooks", [
+  {datatype, string}
+]}.
+
+{mapping, "backend.template.hook.session.subscribed.$name", "emqx_plugin_template.hooks", [
+  {datatype, string}
+]}.
+
+{mapping, "backend.template.hook.session.unsubscribed.$name", "emqx_plugin_template.hooks", [
+  {datatype, string}
+]}.
+
+{mapping, "backend.template.hook.message.publish.$name", "emqx_plugin_template.hooks", [
+  {datatype, string}
+]}.
+
+{mapping, "backend.template.hook.message.acked.$name", "emqx_plugin_template.hooks", [
+  {datatype, string}
+]}.
+
+{mapping, "backend.template.hook.message.delivered.$name", "emqx_plugin_template.hooks", [
+  {datatype, string}
+]}.
+
+{translation, "emqx_plugin_template.hooks", fun(Conf) ->
+  Hooks = cuttlefish_variable:filter_by_prefix("backend.template.hook", Conf),
+  lists:map(fun({[_, _, _,Name1,Name2, _], Val}) ->
+    {lists:concat([Name1,".",Name2]), list_to_binary(Val)}
+  end, Hooks)
+end}.
+
