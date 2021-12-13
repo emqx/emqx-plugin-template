@@ -27,6 +27,5 @@ distclean:
 	@rm -rf _build
 	@rm -f data/app.*.config data/vm.*.args rebar.lock
 
-plugin-zip:
-	$(REBAR) as emqx_plugin_rel compile
-	echo a
+rel:
+	$(REBAR) emqx_plugrel tar
