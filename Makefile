@@ -1,7 +1,7 @@
 ## shallow clone for speed
 
-REBAR_GIT_CLONE_OPTIONS += --depth 1
-export REBAR_GIT_CLONE_OPTIONS
+BUILD_WITHOUT_QUIC ?= true
+export BUILD_WITHOUT_QUIC
 
 REBAR = rebar3
 all: compile
@@ -26,3 +26,7 @@ clean: distclean
 distclean:
 	@rm -rf _build
 	@rm -f data/app.*.config data/vm.*.args rebar.lock
+
+plugin-zip:
+	$(REBAR) as emqx_plugin_rel compile
+	echo a
