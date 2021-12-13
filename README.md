@@ -1,7 +1,8 @@
-emqx-plugin-template
-====================
+# emqx-plugin-template
 
-This is a template plugin for the EMQ X broker. And you can see [Plugin Development Guide](https://docs.emqx.io/broker/v3.0/en/plugins.html#plugin-development-template) to learning how to use it.
+This is a template plugin for EMQ X version >= 4.3.
+
+For development guide, see https://github.com/emqx/emqx/blob/main-v4.4/lib-extra/README.md
 
 Plugin Config
 -------------
@@ -19,9 +20,9 @@ emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]).
 Plugin and Hooks
 -----------------
 
-[Plugin Design](https://docs.emqx.io/broker/v3.0/en/design.html#plugin-design)
+[Plugin Development](https://docs.emqx.io/en/broker/v4.3/advanced/plugins.html#plugin-development)
 
-[Hooks Design](https://docs.emqx.io/broker/v3.0/en/design.html#hooks-design)
+[EMQ X Hook points](https://docs.emqx.io/en/broker/v4.3/advanced/hooks.html)
 
 License
 -------
