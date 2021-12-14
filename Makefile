@@ -3,29 +3,46 @@
 BUILD_WITHOUT_QUIC ?= true
 export BUILD_WITHOUT_QUIC
 
-REBAR = rebar3
+REBAR = $(CURDIR)/rebar3
+REBAR_VERSION = 3.16.1-emqx-1
+
+.PHONY: all
 all: compile
 
-compile:
+.PHONY: get-rebar3
+get-rebar3:
+	@$(CURDIR)/get-rebar3 $(REBAR_VERSION)
+
+$(REBAR): get-rebar3
+
+.PHONY: compile
+compile: $(REBAR)
 	$(REBAR) compile
 
-ct: compile
+.PHONY: ct
+ct:
 	$(REBAR) as test ct -v
 
-eunit: compile
+.PHONY: eunit
+eunit:
 	$(REBAR) as test eunit
 
-xref:
+.PHONY: xref
+xref: $(REBAR)
 	$(REBAR) xref
 
-cover:
+.PHONY: cover
+cover: $(REBAR)
 	$(REBAR) cover
 
+.PHONY: clean
 clean: distclean
 
+.PHONY: distclean
 distclean:
 	@rm -rf _build
 	@rm -f data/app.*.config data/vm.*.args rebar.lock
 
-rel:
+.PHONY: rel
+rel: $(REBAR)
 	$(REBAR) emqx_plugrel tar
