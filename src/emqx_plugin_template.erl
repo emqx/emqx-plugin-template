@@ -16,7 +16,12 @@
 
 -module(emqx_plugin_template).
 
--include("emqx.hrl").
+%% for #message{} record
+%% no need for this include if we call emqx_message:to_map/1 to convert it to a map
+-include_lib("emqx/include/emqx.hrl").
+
+%% for logging
+-include_lib("emqx/include/logger.hrl").
 
 -export([ load/1
         , unload/0
@@ -76,9 +81,14 @@ load(Env) ->
 %% Client Lifecircle Hooks
 %%--------------------------------------------------------------------
 
-on_client_connect(ConnInfo = #{clientid := ClientId}, Props, _Env) ->
-    io:format("Client(~s) connect, ConnInfo: ~p, Props: ~p~n",
-              [ClientId, ConnInfo, Props]),
+on_client_connect(ConnInfo, Props, _Env) ->
+    %% this is to demo the usage of EMQ X's structured-logging macro
+    %% * Recommended to always have a `msg` field,
+    %% * Use underscore instead of space to help log indexers,
+    %% * Try to use static fields
+    ?SLOG(debug, #{msg => "demo_log_msg_on_client_connect",
+                   conninfo => ConnInfo,
+                   props => Props}),
     {ok, Props}.
 
 on_client_connack(ConnInfo = #{clientid := ClientId}, Rc, Props, _Env) ->

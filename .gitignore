@@ -18,3 +18,4 @@ rebar.lock
 test/ct.cover.spec
 .rebar3
 /.idea/
+rebar3.crashdump

@@ -1,34 +1,21 @@
-emqx-plugin-template
-====================
+# emqx-plugin-template
 
-This is a template plugin for the EMQ X broker. And you can see [Plugin Development Guide](https://docs.emqx.io/broker/v3.0/en/plugins.html#plugin-development-template) to learning how to use it.
+This is a template plugin for EMQ X >= 5.0.
 
-Plugin Config
--------------
+For EMQ X >= 4.3, please see branch emqx-v4
 
-Each plugin should have a 'etc/{plugin_name}.conf|config' file to store application config.
+For older EMQ X versions, plugin development is no longer maintained.
 
-Authentication and ACL
-----------------------
+## Release
+
+A EMQ X plugin release is a zip package including
+
+1. A JSON format metadata file
+2. A tar file with plugin's apps packed
+
+Execute `make rel` to have the package created like:
 
 ```
-emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/3, [Env]).
-emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]).
+_build/default/emqx_plugrel/emqx_plugin_template-<vsn>.tar.gz
 ```
-
-Plugin and Hooks
------------------
-
-[Plugin Design](https://docs.emqx.io/broker/v3.0/en/design.html#plugin-design)
-
-[Hooks Design](https://docs.emqx.io/broker/v3.0/en/design.html#hooks-design)
-
-License
--------
-
-Apache License Version 2.0
-
-Author
-------
-
-EMQ X Team.
+See EMQ X documents for details on how to deploy the plugin.
