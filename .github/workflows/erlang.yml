@@ -17,5 +17,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Xref
+      run: make xref
     - name: Make release
       run: make rel
