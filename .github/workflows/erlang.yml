@@ -1,0 +1,23 @@
+name: Erlang CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: erlang:23
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Xref
+      run: make xref
+    - name: Make release
+      run: make rel
