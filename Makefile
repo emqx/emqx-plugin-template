@@ -20,11 +20,11 @@ compile: $(REBAR)
 	$(REBAR) compile
 
 .PHONY: ct
-ct:
+ct: $(REBAR)
 	$(REBAR) as test ct -v
 
 .PHONY: eunit
-eunit:
+eunit: $(REBAR)
 	$(REBAR) as test eunit
 
 .PHONY: xref
