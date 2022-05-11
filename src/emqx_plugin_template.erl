@@ -82,7 +82,7 @@ load(Env) ->
 %%--------------------------------------------------------------------
 
 on_client_connect(ConnInfo, Props, _Env) ->
-    %% this is to demo the usage of EMQ X's structured-logging macro
+    %% this is to demo the usage of EMQX's structured-logging macro
     %% * Recommended to always have a `msg` field,
     %% * Use underscore instead of space to help log indexers,
     %% * Try to use static fields
