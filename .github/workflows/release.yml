@@ -17,6 +17,8 @@ jobs:
       - name: build release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
+          git config --global --add safe.directory "$(pwd)"
+          ./check-vsn.sh
           make rel
 
       - uses: actions/upload-artifact@v2
