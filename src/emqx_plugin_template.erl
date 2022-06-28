@@ -34,7 +34,7 @@
         , on_client_connected/3
         , on_client_disconnected/4
         , on_client_authenticate/3
-        , on_client_check_acl/5
+        , on_client_authorize/5
         , on_client_subscribe/4
         , on_client_unsubscribe/4
         ]).
@@ -63,7 +63,7 @@ load(Env) ->
     emqx_hooks:add('client.connected',    {?MODULE, on_client_connected, [Env]}, ?HP_HIGHEST),
     emqx_hooks:add('client.disconnected', {?MODULE, on_client_disconnected, [Env]}, ?HP_HIGHEST),
     emqx_hooks:add('client.authenticate', {?MODULE, on_client_authenticate, [Env]}, ?HP_HIGHEST),
-    emqx_hooks:add('client.check_acl',    {?MODULE, on_client_check_acl, [Env]}, ?HP_HIGHEST),
+    emqx_hooks:add('client.authorize',    {?MODULE, on_client_authorize, [Env]}, ?HP_HIGHEST),
     emqx_hooks:add('client.subscribe',    {?MODULE, on_client_subscribe, [Env]}, ?HP_HIGHEST),
     emqx_hooks:add('client.unsubscribe',  {?MODULE, on_client_unsubscribe, [Env]}, ?HP_HIGHEST),
     emqx_hooks:add('session.created',     {?MODULE, on_session_created, [Env]}, ?HP_HIGHEST),
@@ -79,7 +79,7 @@ load(Env) ->
     emqx_hooks:add('message.dropped',     {?MODULE, on_message_dropped, [Env]}, ?HP_HIGHEST).
 
 %%--------------------------------------------------------------------
-%% Client Lifecircle Hooks
+%% Client LifeCircle Hooks
 %%--------------------------------------------------------------------
 
 on_client_connect(ConnInfo, Props, _Env) ->
@@ -102,17 +102,18 @@ on_client_connected(ClientInfo = #{clientid := ClientId}, ConnInfo, _Env) ->
               [ClientId, ClientInfo, ConnInfo]).
 
 on_client_disconnected(ClientInfo = #{clientid := ClientId}, ReasonCode, ConnInfo, _Env) ->
-    io:format("Client(~s) disconnected due to ~p, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
+  io:format("Client(~s) disconnected due to ~p, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
               [ClientId, ReasonCode, ClientInfo, ConnInfo]).
 
-on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result, _Env) ->
-    io:format("Client(~s) authenticate, Result:~n~p~n", [ClientId, Result]),
-    {ok, Result}.
+on_client_authenticate(ClientInfo = #{clientid := ClientId}, Result, Env) ->
+  io:format("Client(~s) authenticate, ClientInfo:~n~p~n, Result:~p,~nEnv:~p~n",
+    [ClientId, ClientInfo, Result, Env]),
+  {ok, Result}.
 
-on_client_check_acl(_ClientInfo = #{clientid := ClientId}, Topic, PubSub, Result, _Env) ->
-    io:format("Client(~s) check_acl, PubSub:~p, Topic:~p, Result:~p~n",
-              [ClientId, PubSub, Topic, Result]),
-    {ok, Result}.
+on_client_authorize(ClientInfo = #{clientid := ClientId}, PubSub, Topic, Result, Env) ->
+  io:format("Client(~s) authorize, ClientInfo:~n~p~n, ~p to topic(~s) Result:~p,~nEnv:~p~n",
+    [ClientId, ClientInfo, PubSub, Topic, Result, Env]),
+  {ok, Result}.
 
 on_client_subscribe(#{clientid := ClientId}, _Properties, TopicFilters, _Env) ->
     io:format("Client(~s) will subscribe: ~p~n", [ClientId, TopicFilters]),
@@ -123,7 +124,7 @@ on_client_unsubscribe(#{clientid := ClientId}, _Properties, TopicFilters, _Env) 
     {ok, TopicFilters}.
 
 %%--------------------------------------------------------------------
-%% Session Lifecircle Hooks
+%% Session LifeCircle Hooks
 %%--------------------------------------------------------------------
 
 on_session_created(#{clientid := ClientId}, SessInfo, _Env) ->
@@ -157,7 +158,7 @@ on_message_publish(Message = #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
     {ok, Message};
 
 on_message_publish(Message, _Env) ->
-    io:format("Publish ~s~n", [emqx_message:to_map(Message)]),
+    io:format("Publish ~p~n", [emqx_message:to_map(Message)]),
     {ok, Message}.
 
 on_message_dropped(#message{topic = <<"$SYS/", _/binary>>}, _By, _Reason, _Env) ->
@@ -182,7 +183,7 @@ unload() ->
     emqx_hooks:del('client.connected',    {?MODULE, on_client_connected}),
     emqx_hooks:del('client.disconnected', {?MODULE, on_client_disconnected}),
     emqx_hooks:del('client.authenticate', {?MODULE, on_client_authenticate}),
-    emqx_hooks:del('client.check_acl',    {?MODULE, on_client_check_acl}),
+    emqx_hooks:del('client.authorize',    {?MODULE, on_client_authorize}),
     emqx_hooks:del('client.subscribe',    {?MODULE, on_client_subscribe}),
     emqx_hooks:del('client.unsubscribe',  {?MODULE, on_client_unsubscribe}),
     emqx_hooks:del('session.created',     {?MODULE, on_session_created}),
