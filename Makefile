@@ -4,7 +4,7 @@ BUILD_WITHOUT_QUIC ?= true
 export BUILD_WITHOUT_QUIC
 
 REBAR = $(CURDIR)/rebar3
-REBAR_VERSION = 3.16.1-emqx-1
+REBAR_VERSION = 3.19.0-emqx-1
 
 .PHONY: all
 all: compile
