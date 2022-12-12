@@ -3,8 +3,8 @@
 BUILD_WITHOUT_QUIC ?= true
 export BUILD_WITHOUT_QUIC
 
-REBAR = $(CURDIR)/rebar3
-REBAR_VERSION = 3.16.1-emqx-1
+REBAR ?= $(or $(shell which rebar3 2>/dev/null),$(CURDIR)/rebar3)
+REBAR_VERSION ?= 3.19.0-emqx-1
 
 .PHONY: all
 all: compile
@@ -13,7 +13,8 @@ all: compile
 get-rebar3:
 	@$(CURDIR)/get-rebar3 $(REBAR_VERSION)
 
-$(REBAR): get-rebar3
+$(REBAR):
+	$(MAKE) get-rebar3
 
 .PHONY: compile
 compile: $(REBAR)
