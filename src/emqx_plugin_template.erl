@@ -21,6 +21,7 @@
 -include_lib("emqx/include/emqx.hrl").
 -include_lib("emqx/include/emqx_hooks.hrl").
 
+
 %% for logging
 -include_lib("emqx/include/logger.hrl").
 
@@ -91,6 +92,9 @@ on_client_connect(ConnInfo, Props, _Env) ->
     ?SLOG(debug, #{msg => "demo_log_msg_on_client_connect",
                    conninfo => ConnInfo,
                    props => Props}),
+    %% If you want to refuse this connection, you should return with:
+    %% {stop, {error, ReasonCode}}
+    %% the ReasonCode can be found in the emqx_reason_codes.erl
     {ok, Props}.
 
 on_client_connack(ConnInfo = #{clientid := ClientId}, Rc, Props, _Env) ->
