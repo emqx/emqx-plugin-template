@@ -46,7 +46,7 @@
         , on_session_unsubscribed/4
         , on_session_resumed/3
         , on_session_discarded/3
-        , on_session_takeovered/3
+        , on_session_takenover/3
         , on_session_terminated/4
         ]).
 
@@ -65,7 +65,6 @@ load(Env) ->
     hook('client.disconnected', {?MODULE, on_client_disconnected, [Env]}),
     hook('client.authenticate', {?MODULE, on_client_authenticate, [Env]}),
     hook('client.authorize',    {?MODULE, on_client_authorize, [Env]}),
-    hook('client.check_acl',    {?MODULE, on_client_check_acl, [Env]}),
     hook('client.subscribe',    {?MODULE, on_client_subscribe, [Env]}),
     hook('client.unsubscribe',  {?MODULE, on_client_unsubscribe, [Env]}),
     hook('session.created',     {?MODULE, on_session_created, [Env]}),
@@ -73,7 +72,7 @@ load(Env) ->
     hook('session.unsubscribed',{?MODULE, on_session_unsubscribed, [Env]}),
     hook('session.resumed',     {?MODULE, on_session_resumed, [Env]}),
     hook('session.discarded',   {?MODULE, on_session_discarded, [Env]}),
-    hook('session.takeovered',  {?MODULE, on_session_takeovered, [Env]}),
+    hook('session.takenover',   {?MODULE, on_session_takenover, [Env]}),
     hook('session.terminated',  {?MODULE, on_session_terminated, [Env]}),
     hook('message.publish',     {?MODULE, on_message_publish, [Env]}),
     hook('message.delivered',   {?MODULE, on_message_delivered, [Env]}),
@@ -147,8 +146,8 @@ on_session_resumed(#{clientid := ClientId}, SessInfo, _Env) ->
 on_session_discarded(_ClientInfo = #{clientid := ClientId}, SessInfo, _Env) ->
     io:format("Session(~s) is discarded. Session Info: ~p~n", [ClientId, SessInfo]).
 
-on_session_takeovered(_ClientInfo = #{clientid := ClientId}, SessInfo, _Env) ->
-    io:format("Session(~s) is takeovered. Session Info: ~p~n", [ClientId, SessInfo]).
+on_session_takenover(_ClientInfo = #{clientid := ClientId}, SessInfo, _Env) ->
+    io:format("Session(~s) is takenover. Session Info: ~p~n", [ClientId, SessInfo]).
 
 on_session_terminated(_ClientInfo = #{clientid := ClientId}, Reason, SessInfo, _Env) ->
     io:format("Session(~s) is terminated due to ~p~nSession Info: ~p~n",
@@ -189,7 +188,6 @@ unload() ->
     unhook('client.disconnected', {?MODULE, on_client_disconnected}),
     unhook('client.authenticate', {?MODULE, on_client_authenticate}),
     unhook('client.authorize',    {?MODULE, on_client_authorize}),
-    unhook('client.check_acl',    {?MODULE, on_client_check_acl}),
     unhook('client.subscribe',    {?MODULE, on_client_subscribe}),
     unhook('client.unsubscribe',  {?MODULE, on_client_unsubscribe}),
     unhook('session.created',     {?MODULE, on_session_created}),
@@ -197,7 +195,7 @@ unload() ->
     unhook('session.unsubscribed',{?MODULE, on_session_unsubscribed}),
     unhook('session.resumed',     {?MODULE, on_session_resumed}),
     unhook('session.discarded',   {?MODULE, on_session_discarded}),
-    unhook('session.takeovered',  {?MODULE, on_session_takeovered}),
+    unhook('session.takenover',   {?MODULE, on_session_takenover}),
     unhook('session.terminated',  {?MODULE, on_session_terminated}),
     unhook('message.publish',     {?MODULE, on_message_publish}),
     unhook('message.delivered',   {?MODULE, on_message_delivered}),
