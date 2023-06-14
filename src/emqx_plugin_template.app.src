@@ -1,14 +1,12 @@
-{application, emqx_plugin_template,
- [{description, "EMQX Plugin Template"},
-  {vsn, "5.0.0"},
+{{=@@ @@=}}
+{application, @@name@@,
+ [{description, "@@description@@"},
+  {vsn, "@@app_vsn@@"},
   {modules, []},
-  {registered, [emqx_plugin_template_sup]},
-  {applications, [kernel,stdlib,map_sets]},
-  {mod, {emqx_plugin_template_app,[]}},
+  {registered, [@@name@@_sup]},
+  {applications, [kernel, stdlib, map_sets]},
+  {mod, {@@name@@_app, []}},
   {env, []},
-  {licenses, ["Apache-2.0"]},
-  {maintainers, ["EMQX Team <contact@emqx.io>"]},
-  {links, [{"Homepage", "https://emqx.io/"},
-           {"Github", "https://github.com/emqx/emqx-plugin-template"}
-          ]}
+  {licenses, ["@@license@@"]},
+  {maintainers, ["@@author_name@@ <@@author_email@@>"]}
  ]}.
