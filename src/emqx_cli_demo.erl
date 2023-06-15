@@ -14,6 +14,8 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
+%% This is an example on how to extend `emqx ctl` with your own commands.
+
 -module(emqx_cli_demo).
 
 -export([cmd/1]).
@@ -23,4 +25,3 @@ cmd(["arg1", "arg2"]) ->
 
 cmd(_) ->
     emqx_ctl:usage([{"cmd arg1 arg2", "cmd demo"}]).
-
