@@ -13,6 +13,7 @@
 {file, "Makefile", "{{name}}/Makefile"}.
 {file, "README.md", "{{name}}/README.md"}.
 {file, "check-vsn.sh", "{{name}}/check-svn.sh"}.
+{file, "erlang_ls.config", "{{name}}/erlang_ls.config"}.
 {file, "get-rebar3", "{{name}}/get-rebar3"}.
 {file, "priv/config.hocon", "{{name}}/priv/config.hocon"}.
 {file, "src/emqx_cli_demo.erl", "{{name}}/src/emqx_cli_demo.erl"}.
