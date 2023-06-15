@@ -21,7 +21,7 @@ A plugin template for Elixir (experimental) can be found at https://github.com/e
 ```shell
 $ mkdir -p ~/.config/rebar3/templates
 $ pushd ~/.config/rebar3/templates
-$ git clone git@github.com:emqx/emqx-plugin-template.git
+$ git clone https://github.com/emqx/emqx-plugin-template.git
 $ popd
 $ rebar3 new emqx-plugin my_emqx_plugin
 $ make -C my_emqx_plugin rel
