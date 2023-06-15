@@ -9,7 +9,7 @@
   ]}.
 {dir, "{{name}}/src"}.
 {dir, "{{name}}/priv"}.
-{file, "License", "{{name}}/License"}.
+{file, "LICENSE", "{{name}}/LICENSE"}.
 {file, "Makefile", "{{name}}/Makefile"}.
 {file, "check-vsn.sh", "{{name}}/check-svn.sh"}.
 {file, "erlang_ls.config", "{{name}}/erlang_ls.config"}.
