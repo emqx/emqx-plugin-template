@@ -17,8 +17,8 @@
 {file, "src/emqx_cli_demo.erl", "{{name}}/src/emqx_cli_demo.erl"}.
 {chmod, "{{name}}/get-rebar3", 8#755}.
 {template, "README_template.md", "{{name}}/README.md"}.
+{template, "rebar_template.config", "{{name}}/rebar.config"}.
 {template, "src/emqx_plugin_template.app.src", "{{name}}/src/{{name}}.app.src"}.
 {template, "src/emqx_plugin_template.erl", "{{name}}/src/{{name}}.erl"}.
 {template, "src/emqx_plugin_template_app.erl", "{{name}}/src/{{name}}_app.erl"}.
 {template, "src/emqx_plugin_template_sup.erl", "{{name}}/src/{{name}}_sup.erl"}.
-{template, "rebar.config", "{{name}}/rebar.config"}.

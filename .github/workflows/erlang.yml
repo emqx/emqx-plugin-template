@@ -21,9 +21,8 @@ jobs:
       run: |
         mkdir -p ~/.config/rebar3/templates
         cp -r . ~/.config/rebar3/templates
-        cd /tmp
         rebar3 new emqx-plugin my_emqx_plugin
     - name: Xref
-      run: make -C /tmp/my_emqx_plugin xref
+      run: make -C my_emqx_plugin xref
     - name: Make release
-      run: make -C /tmp/my_emqx_plugin rel
+      run: make -C my_emqx_plugin rel

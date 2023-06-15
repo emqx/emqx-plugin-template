@@ -20,19 +20,16 @@ jobs:
           git config --global --add safe.directory "$(pwd)"
           mkdir -p ~/.config/rebar3/templates
           cp -r . ~/.config/rebar3/templates
-          ORIG_DIR=$(pwd)
-          cd /tmp
           rebar3 new emqx-plugin my_emqx_plugin version=1.0.0-rebar3-template-test
-          cd $ORIG_DIR
-          ./check-vsn.sh /tmp/my_emqx_plugin
-          make -C /tmp/my_emqx_plugin rel
+          ./check-vsn.sh my_emqx_plugin
+          make -C my_emqx_plugin rel
 
       - uses: actions/upload-artifact@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           name: packages
           path: |
-            /tmp/my_emqx_plugin/_build/default/emqx_plugrel/*.tar.gz
+            my_emqx_plugin/_build/default/emqx_plugrel/*.tar.gz
 
   release:
     runs-on: ubuntu-latest
