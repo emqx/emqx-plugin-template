@@ -1,6 +1,6 @@
-{description, "Create custom EMQX plugins in a snap"}.
+{description, "Create custom EMQX plugins in a snap!"}.
 {variables, [
-    {description, "Another amazing EMQX plugin"},
+    {description, "Another amazing EMQX plugin."},
     {version, "1.0.0", "The release version of this plugin."},
     {app_vsn, "0.1.0", "The erlang application vsn value."},
     {license, "Apache-2.0", "Short identifier for license you want to distribute this plugin under."},
@@ -11,7 +11,6 @@
 {dir, "{{name}}/priv"}.
 {file, "License", "{{name}}/License"}.
 {file, "Makefile", "{{name}}/Makefile"}.
-{file, "README.md", "{{name}}/README.md"}.
 {file, "check-vsn.sh", "{{name}}/check-svn.sh"}.
 {file, "erlang_ls.config", "{{name}}/erlang_ls.config"}.
 {file, "get-rebar3", "{{name}}/get-rebar3"}.
@@ -19,6 +18,7 @@
 {file, "src/emqx_cli_demo.erl", "{{name}}/src/emqx_cli_demo.erl"}.
 {chmod, "{{name}}/check-svn.sh", 8#755}.
 {chmod, "{{name}}/get-rebar3", 8#755}.
+{template, "README_template.md", "{{name}}/README.md"}.
 {template, "src/emqx_plugin_template.app.src", "{{name}}/src/{{name}}.app.src"}.
 {template, "src/emqx_plugin_template.erl", "{{name}}/src/{{name}}.erl"}.
 {template, "src/emqx_plugin_template_app.erl", "{{name}}/src/{{name}}_app.erl"}.
