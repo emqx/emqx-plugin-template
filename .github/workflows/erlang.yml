@@ -17,7 +17,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Create Plugin Project
+      run: |
+        mkdir -p ~/.config/rebar3/templates
+        cp -r . ~/.config/rebar3/templates
+        rebar3 new emqx-plugin my_emqx_plugin
     - name: Xref
-      run: make xref
+      run: make -C my_emqx_plugin xref
     - name: Make release
-      run: make rel
+      run: make -C my_emqx_plugin rel

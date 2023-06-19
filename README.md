@@ -1,21 +1,32 @@
-# emqx-plugin-template
+# EMQX Plugin Template
 
-This is a template plugin for EMQX >= 5.0.
+This is a [rebar3 template](https://rebar3.org/docs/tutorials/templates/#custom-templates) to ease creation of EMQX Plugins in Erlang.
+
+This plugin template is for EMQX >= 5.0.
 
 For EMQX >= 4.3, please see branch emqx-v4
 
 For older EMQX versions, plugin development is no longer maintained.
 
-## Release
+A plugin template for Elixir (experimental) can be found at https://github.com/emqx/emqx-elixir-plugin.
 
-A EMQX plugin release is a zip package including
+## Prerequisites
 
-1. A JSON format metadata file
-2. A tar file with plugin's apps packed
+ + A working build environment (eg `build_essential`) including `make`
+ + Erlang OTP 25 or newer recommended
+ + rebar3
 
-Execute `make rel` to have the package created like:
+## Usage
 
+```shell
+$ mkdir -p ~/.config/rebar3/templates
+$ pushd ~/.config/rebar3/templates
+$ git clone https://github.com/emqx/emqx-plugin-template.git
+$ popd
+$ rebar3 new emqx-plugin my_emqx_plugin
+$ make -C my_emqx_plugin rel
 ```
-_build/default/emqx_plugrel/emqx_plugin_template-<vsn>.tar.gz
-```
-See EMQX documents for details on how to deploy the plugin.
+
+This will create a tarball containing your custom plugin. You can use EMQX's Dashboard or it's command line tools to deploy it into your running EMQX cluster.
+
+See [EMQX documentation](https://docs.emqx.com/en/enterprise/v5.0/extensions/plugins.html) for details on how to deploy custom plugins.

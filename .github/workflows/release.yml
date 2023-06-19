@@ -18,15 +18,18 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           git config --global --add safe.directory "$(pwd)"
-          ./check-vsn.sh
-          make rel
+          mkdir -p ~/.config/rebar3/templates
+          cp -r . ~/.config/rebar3/templates
+          rebar3 new emqx-plugin my_emqx_plugin version=1.0.0-rebar3-template-test
+          ./check-vsn.sh my_emqx_plugin
+          make -C my_emqx_plugin rel
 
       - uses: actions/upload-artifact@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           name: packages
           path: |
-            _build/default/emqx_plugrel/*.tar.gz
+            my_emqx_plugin/_build/default/emqx_plugrel/*.tar.gz
 
   release:
     runs-on: ubuntu-latest
