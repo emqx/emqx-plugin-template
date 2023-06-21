@@ -1,7 +1,7 @@
 {description, "Create custom EMQX plugins in a snap!"}.
 {variables, [
     {description, "Another amazing EMQX plugin."},
-    {version, "5.1.0", "The release version of this plugin."},
+    {version, "1.0.0", "The release version of this plugin."},
     {app_vsn, "0.1.0", "The erlang application vsn value."},
     {license, "Apache-2.0", "Short identifier for license you want to distribute this plugin under."},
     {author_website, "http://example.com", "A website with details about the author."},

@@ -20,7 +20,7 @@ jobs:
           git config --global --add safe.directory "$(pwd)"
           mkdir -p ~/.config/rebar3/templates
           cp -r . ~/.config/rebar3/templates
-          rebar3 new emqx-plugin my_emqx_plugin version=1.0.0-rebar3-template-test
+          rebar3 new emqx-plugin my_emqx_plugin version=5.1.0
           ./check-vsn.sh my_emqx_plugin
           make -C my_emqx_plugin rel
 
