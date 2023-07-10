@@ -37,6 +37,7 @@
 
 %% Message Pubsub Hooks
 -export([ on_message_publish/2
+        , on_message_puback/4
         , on_message_delivered/3
         , on_message_acked/3
         , on_message_dropped/4
@@ -60,6 +61,7 @@ load(Env) ->
     hook('session.takenover',   {?MODULE, on_session_takenover, [Env]}),
     hook('session.terminated',  {?MODULE, on_session_terminated, [Env]}),
     hook('message.publish',     {?MODULE, on_message_publish, [Env]}),
+    hook('message.puback',      {?MODULE, on_message_puback, [Env]}),
     hook('message.delivered',   {?MODULE, on_message_delivered, [Env]}),
     hook('message.acked',       {?MODULE, on_message_acked, [Env]}),
     hook('message.dropped',     {?MODULE, on_message_dropped, [Env]}).
@@ -150,6 +152,18 @@ on_message_publish(Message, _Env) ->
     io:format("Publish ~p~n", [emqx_message:to_map(Message)]),
     {ok, Message}.
 
+on_message_puback(_PacketId, #message{topic = _Topic} = Message, PubRes, _Env) ->
+    NewRC = case PubRes of
+                %% Demo: some service do not want to expose the error code (129) to client;
+                %% so here it remap 129 to 128
+                129 -> 128;
+                _ ->
+                    PubRes
+            end,
+    io:format("Puback ~p RC: ~p~n",
+              [emqx_message:to_map(Message), NewRC]),
+    {ok, NewRC}.
+
 on_message_dropped(#message{topic = <<"$SYS/", _/binary>>}, _By, _Reason, _Env) ->
     ok;
 on_message_dropped(Message, _By = #{node := Node}, Reason, _Env) ->
@@ -183,6 +197,7 @@ unload() ->
     unhook('session.takenover',   {?MODULE, on_session_takenover}),
     unhook('session.terminated',  {?MODULE, on_session_terminated}),
     unhook('message.publish',     {?MODULE, on_message_publish}),
+    unhook('message.puback',      {?MODULE, on_message_puback}),
     unhook('message.delivered',   {?MODULE, on_message_delivered}),
     unhook('message.acked',       {?MODULE, on_message_acked}),
     unhook('message.dropped',     {?MODULE, on_message_dropped}).
