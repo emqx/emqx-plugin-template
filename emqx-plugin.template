@@ -3,6 +3,7 @@
     {description, "Another amazing EMQX plugin."},
     {version, "1.0.0", "The release version of this plugin."},
     {app_vsn, "0.1.0", "The erlang application vsn value."},
+    {emqx_vsn, "v5.1.4", "EMQX version to use as a dependency."},
     {license, "Apache-2.0", "Short identifier for license you want to distribute this plugin under."},
     {author_website, "http://example.com", "A website with details about the author."},
     {repo, "https://github.com/emqx/emqx-plugin-template", "Where to find the source code for this plugin."}
@@ -14,6 +15,7 @@
 {file, "erlang_ls.config", "{{name}}/erlang_ls.config"}.
 {file, "get-rebar3", "{{name}}/get-rebar3"}.
 {file, "priv/config.hocon", "{{name}}/priv/config.hocon"}.
+{file, ".gitignore.template", ".gitignore"}.
 {chmod, "{{name}}/get-rebar3", 8#755}.
 {template, "README_template.md", "{{name}}/README.md"}.
 {template, "rebar_template.config", "{{name}}/rebar.config"}.

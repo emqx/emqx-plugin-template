@@ -14,7 +14,7 @@
         , unload/0
         ]).
 
-%% Client Lifecircle Hooks
+%% Client Lifecycle Hooks
 -export([ on_client_connect/3
         , on_client_connack/4
         , on_client_connected/3
@@ -25,7 +25,7 @@
         , on_client_unsubscribe/4
         ]).
 
-%% Session Lifecircle Hooks
+%% Session Lifecycle Hooks
 -export([ on_session_created/3
         , on_session_subscribed/4
         , on_session_unsubscribed/4
@@ -65,7 +65,7 @@ load(Env) ->
     hook('message.dropped',     {?MODULE, on_message_dropped, [Env]}).
 
 %%--------------------------------------------------------------------
-%% Client LifeCircle Hooks
+%% Client Lifecycle Hooks
 %%--------------------------------------------------------------------
 
 on_client_connect(ConnInfo, Props, _Env) ->
@@ -113,7 +113,7 @@ on_client_unsubscribe(#{clientid := ClientId}, _Properties, TopicFilters, _Env) 
     {ok, TopicFilters}.
 
 %%--------------------------------------------------------------------
-%% Session LifeCircle Hooks
+%% Session Lifecycle Hooks
 %%--------------------------------------------------------------------
 
 on_session_created(#{clientid := ClientId}, SessInfo, _Env) ->
