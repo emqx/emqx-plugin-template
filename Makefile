@@ -2,6 +2,8 @@
 
 BUILD_WITHOUT_QUIC ?= true
 export BUILD_WITHOUT_QUIC
+BUILD_WITHOUT_ROCKSDB ?= true
+export BUILD_WITHOUT_ROCKSDB
 
 REBAR ?= $(or $(shell which rebar3 2>/dev/null),$(CURDIR)/rebar3)
 REBAR_VERSION ?= 3.19.0-emqx-1
