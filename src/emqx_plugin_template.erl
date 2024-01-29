@@ -97,8 +97,8 @@ on_client_disconnected(ClientInfo = #{clientid := ClientId}, ReasonCode, ConnInf
               [ClientId, ReasonCode, ClientInfo, ConnInfo]).
 
 %% @doc
-%% - Return `{stop, ok}' if this clinet is to be allowed to login.
-%% - Return `{stop, {error, not_authorized}}' if this clinet is not allowed to login.
+%% - Return `{stop, ok}' if this client is to be allowed to login.
+%% - Return `{stop, {error, not_authorized}}' if this client is not allowed to login.
 %% - Return `ignore' if this client is to be authenticated by other plugins
 %% or EMQX's built-in authenticators.
 on_client_authenticate(ClientInfo = #{clientid := ClientId}, DefaultResult, Env) ->
@@ -106,7 +106,7 @@ on_client_authenticate(ClientInfo = #{clientid := ClientId}, DefaultResult, Env)
               "DefaultResult:~p~n"
               "Env:~p~n",
               [ClientId, ClientInfo, DefaultResult, Env]),
-    {stop, DefaultResult}.
+    DefaultResult.
 
 %% @doc
 %% - Return `{stop, #{result => Result}}' where `Result' is either `allow' or `deny'.
