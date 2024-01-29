@@ -3,7 +3,7 @@
     {description, "Another amazing EMQX plugin."},
     {version, "1.0.0", "The release version of this plugin."},
     {app_vsn, "0.1.0", "The erlang application vsn value."},
-    {emqx_vsn, "v5.1.4", "EMQX version to use as a dependency."},
+    {emqx_vsn, "v5.4.1", "EMQX version to use as a dependency."},
     {license, "Apache-2.0", "Short identifier for license you want to distribute this plugin under."},
     {author_website, "http://example.com", "A website with details about the author."},
     {repo, "https://github.com/emqx/emqx-plugin-template", "Where to find the source code for this plugin."}

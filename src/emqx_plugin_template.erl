@@ -93,18 +93,33 @@ on_client_connected(ClientInfo = #{clientid := ClientId}, ConnInfo, _Env) ->
               [ClientId, ClientInfo, ConnInfo]).
 
 on_client_disconnected(ClientInfo = #{clientid := ClientId}, ReasonCode, ConnInfo, _Env) ->
-  io:format("Client(~s) disconnected due to ~p, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
+    io:format("Client(~s) disconnected due to ~p, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
               [ClientId, ReasonCode, ClientInfo, ConnInfo]).
 
-on_client_authenticate(ClientInfo = #{clientid := ClientId}, Result, Env) ->
-  io:format("Client(~s) authenticate, ClientInfo:~n~p~n, Result:~p,~nEnv:~p~n",
-    [ClientId, ClientInfo, Result, Env]),
-  {ok, Result}.
+%% @doc
+%% - Return `{stop, ok}' if this client is to be allowed to login.
+%% - Return `{stop, {error, not_authorized}}' if this client is not allowed to login.
+%% - Return `ignore' if this client is to be authenticated by other plugins
+%% or EMQX's built-in authenticators.
+on_client_authenticate(ClientInfo = #{clientid := ClientId}, DefaultResult, Env) ->
+    io:format("Client(~s) authenticate, ClientInfo:~n~p~n"
+              "DefaultResult:~p~n"
+              "Env:~p~n",
+              [ClientId, ClientInfo, DefaultResult, Env]),
+    DefaultResult.
 
-on_client_authorize(ClientInfo = #{clientid := ClientId}, PubSub, Topic, Result, Env) ->
-  io:format("Client(~s) authorize, ClientInfo:~n~p~n, ~p to topic(~s) Result:~p,~nEnv:~p~n",
-    [ClientId, ClientInfo, PubSub, Topic, Result, Env]),
-  {ok, Result}.
+%% @doc
+%% - Return `{stop, #{result => Result}}' where `Result' is either `allow' or `deny'.
+%% - Return `ignore' if this client is to be authorized by other plugins or
+%% EMQX's built-in authorization sources.
+on_client_authorize(ClientInfo = #{clientid := ClientId}, PubSub, Topic, DefaultResult, Env) ->
+    io:format("Client(~s) authorize, ClientInfo:~n~p~n"
+              "~p to topic (~p) DefaultResult:~p~n"
+              "Env:~p~n",
+              [ClientId, ClientInfo, PubSub, Topic, DefaultResult, Env]),
+    %% `from' is for logging
+    Result = #{result => allow, from => ?MODULE},
+    {stop, Result}.
 
 on_client_subscribe(#{clientid := ClientId}, _Properties, TopicFilters, _Env) ->
     io:format("Client(~s) will subscribe: ~p~n", [ClientId, TopicFilters]),
