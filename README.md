@@ -27,6 +27,10 @@ $ rebar3 new emqx-plugin my_emqx_plugin
 $ make -C my_emqx_plugin rel
 ```
 
+**NOTE**
+If the `REBAR_CACHE_DIR` environment variable has been set, the directory for templates should be `$REBAR_CACHE_DIR/.config/rebar3/templates`.
+[Here](https://github.com/erlang/rebar3/issues/2762) is a relevant issue.
+
 This will create a tarball containing your custom plugin. You can use EMQX's Dashboard or it's command line tools to deploy it into your running EMQX cluster.
 
 See [EMQX documentation](https://docs.emqx.com/en/enterprise/v5.0/extensions/plugins.html) for details on how to deploy custom plugins.
