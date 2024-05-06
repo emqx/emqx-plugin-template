@@ -16,7 +16,8 @@ A plugin template for Elixir (experimental) can be found at https://github.com/e
 ## Prerequisites
 
  + A working build environment (eg `build_essential`) including `make`
- + Erlang OTP 25 or newer recommended
+ + ASDF tool-chains recommended to manage EMQX released Erlang/OTP.
+ + **MUST** use OTP 25 For docker image deployment. See also [./.tool-versions](./.tool-versions) and [EMQX Release v5.5.0](https://github.com/emqx/emqx/releases/tag/v5.5.0).
  + rebar3
 
 ## Usage
@@ -32,6 +33,8 @@ $ make -C my_emqx_plugin rel
 
 > [!NOTE]
 > In order to use the AVRO config schema feature, please make sure the plugin template tag version >= 5.7.0
+> Rename files in the `./priv` directory to ensure that EMQX can load them correctly after the plugin is installed.
+> See also [EMQX Documents - Plugins](https://www.emqx.io/docs/en/latest/extensions/plugins.html) for more detail.
 
 > [!NOTE]
 > If the `REBAR_CACHE_DIR` environment variable has been set, the directory for templates should be `$REBAR_CACHE_DIR/.config/rebar3/templates`.

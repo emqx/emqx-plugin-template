@@ -9,6 +9,7 @@ An EMQX plugin release is a tar file including including a subdirectory of this 
 
 1. A JSON format metadata file describing the plugin
 2. Versioned directories for all applications needed for this plugin (source and binaries).
+3. Confirm the OTP version used by EMQX that the plugin will be installed on (See also [./.tool-versions](./.tool-versions)).
 
 In a shell from this plugin's working directory execute `make rel` to have the package created like:
 
