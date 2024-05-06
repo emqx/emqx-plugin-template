@@ -1,0 +1,74 @@
+{
+  "$hostname_label": {
+    "zh": "主机名",
+    "en": "Hostname"
+  },
+  "$hostname_desc": {
+    "zh": "主机名是一个标识符，用于识别网络上的设备。主机名通常是一个域名，例如：www.example.com。",
+    "en": "The hostname is an identifier used to identify devices on a network. The hostname is usually a domain name, such as www.example.com."
+  },
+  "$hostname_validate": {
+    "zh": "主机名必须是一个有效的域名。",
+    "en": "The hostname must be a valid domain name."
+  },
+  "$port_label": {
+    "zh": "端口",
+    "en": "Port"
+  },
+  "$port_desc": {
+    "zh": "端口是一个数字，用于标识网络上的服务。常见的端口有：80（HTTP）、443（HTTPS）、21（FTP）。",
+    "en": "The port is a number used to identify services on a network. Common ports include: 80 (HTTP), 443 (HTTPS), 21 (FTP)."
+  },
+  "$port_range_validate": {
+    "zh": "端口必须在 1 到 65535 之间。",
+    "en": "The port must be between 1 and 65535."
+  },
+  "$connection_options_label": {
+    "en": "Connection Options",
+    "zh": "连接选项"
+  },
+  "$connection_options_desc": {
+    "en": "A list of additional options for the database connection.",
+    "zh": "数据库连接的附加选项列表。"
+  },
+  "$username_label": {
+    "en": "Username",
+    "zh": "用户名"
+  },
+  "$username_desc": {
+    "zh": "连接数据库的用户名",
+    "en": "The username used to connect to the database."
+  },
+  "$password_label": {
+    "en": "Password",
+    "zh": "密码"
+  },
+  "$password_desc": {
+    "en": "The password used to connect to the database.",
+    "zh": "连接数据库的密码。"
+  },
+  "$password_length_validate": {
+    "en": "The password must be at least 8 characters long.",
+    "zh": "密码长度必须至少为 8 个字符。"
+  },
+  "$password_validate": {
+    "en": "The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+    "zh": "密码必须包含至少一个大写字母、一个小写字母、一个数字和一个特殊字符。"
+  },
+  "$option_name_label": {
+    "en": "Option Name",
+    "zh": "选项名称"
+  },
+  "$option_name_desc": {
+    "en": "The name of the connection option.",
+    "zh": "连接选项的名称。"
+  },
+  "$option_value_label": {
+    "en": "Option Value",
+    "zh": "选项值"
+  },
+  "$option_value_desc": {
+    "en": "The value of the connection option.",
+    "zh": "连接选项的值。"
+  }
+}
