@@ -1,0 +1,11 @@
+## The Official Releases using OTP 26 since EMQX v5.5.0
+## See also
+## https://github.com/emqx/emqx/releases/tag/v5.5.0
+# erlang 26.2.1-2
+# elixir 1.15.7-otp-26
+
+## Keep using OTP 25.3.2 for docker image
+## see also
+## https://github.com/emqx/emqx/blob/v5.6.0/build#L400-L401
+erlang 25.3.2-2
+elixir 1.15.7-otp-25
