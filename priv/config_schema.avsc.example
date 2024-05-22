@@ -1,0 +1,68 @@
+{
+  "type": "record",
+  "name": "ExtendedConfig",
+  "fields": [
+    {
+      "name": "hostname",
+      "type": "string",
+      "default": "localhost"
+    },
+    {
+      "name": "port",
+      "type": "int",
+      "default": 3306
+    },
+    {
+      "name": "connectionOptions",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "ConnectionOption",
+          "fields": [
+            {
+              "name": "optionName",
+              "type": "string"
+            },
+            {
+              "name": "optionValue",
+              "type": "string"
+            },
+            {
+              "name": "optionType",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "default": [
+        {
+          "optionName": "autoReconnect",
+          "optionValue": "true",
+          "optionType": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "type": {
+        "type": "record",
+        "name": "authConfigs",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "type": [
+              "null",
+              "string"
+            ],
+            "default": null
+          }
+        ]
+      }
+    }
+  ]
+}

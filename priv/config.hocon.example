@@ -1,0 +1,20 @@
+## This is a demo config in HOCON format
+## The same format used by EMQX since 5.0
+
+hostname = "localhost"
+port = 3306
+
+connectionOptions = [
+  {
+    optionName = "autoReconnect"
+    optionType = "string"
+    optionValue = "true"
+  }
+]
+
+auth {
+  username = "admin"
+  password {
+    string = "Public123"
+  }
+}

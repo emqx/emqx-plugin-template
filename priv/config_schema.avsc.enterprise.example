@@ -1,0 +1,141 @@
+{
+  "type": "record",
+  "name": "ExtendedConfig",
+  "fields": [
+    {
+      "name": "hostname",
+      "type": "string",
+      "default": "localhost",
+      "$ui": {
+        "component": "input",
+        "flex": 12,
+        "required": true,
+        "label": "$hostname_label",
+        "description": "$hostname_desc",
+        "rules": [
+          {
+            "type": "pattern",
+            "pattern": "^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])(\\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9]))*$",
+            "message": "$hostname_validate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "port",
+      "type": "int",
+      "default": 3306,
+      "$ui": {
+        "component": "input-number",
+        "flex": 12,
+        "required": true,
+        "label": "$port_label",
+        "description": "$port_desc",
+        "rules": [
+          {
+            "type": "range",
+            "min": 1,
+            "max": 65535,
+            "message": "$port_range_validate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connectionOptions",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "ConnectionOption",
+          "fields": [
+            {
+              "name": "optionName",
+              "type": "string"
+            },
+            {
+              "name": "optionValue",
+              "type": "string"
+            },
+            {
+              "name": "optionType",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "default": [
+        {
+          "optionName": "autoReconnect",
+          "optionValue": "true",
+          "optionType": "boolean"
+        }
+      ],
+      "$ui": {
+        "component": "maps-editor",
+        "flex": 24,
+        "items": {
+          "optionName": {
+            "label": "$option_name_label",
+            "description": "$option_name_desc",
+            "type": "string"
+          },
+          "optionValue": {
+            "label": "$option_value_label",
+            "description": "$option_value_desc",
+            "type": "string"
+          }
+        },
+        "label": "$connection_options_label",
+        "description": "$connection_options_desc"
+      }
+    },
+    {
+      "name": "auth",
+      "type": {
+        "type": "record",
+        "name": "authConfigs",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string",
+            "$ui": {
+              "component": "input",
+              "flex": 12,
+              "required": true,
+              "label": "$username_label",
+              "description": "$username_desc"
+            }
+          },
+          {
+            "name": "password",
+            "type": [
+              "null",
+              "string"
+            ],
+            "default": null,
+            "$ui": {
+              "component": "input-password",
+              "flex": 12,
+              "label": "$password_label",
+              "description": "$password_desc",
+              "rules": [
+                {
+                  "type": "length",
+                  "minLength": 8,
+                  "maxLength": 128,
+                  "message": "$password_length_validate"
+                },
+                {
+                  "type": "pattern",
+                  "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]*$",
+                  "message": "$password_validate"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
