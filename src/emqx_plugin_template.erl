@@ -37,7 +37,7 @@
 
 %% Message Pubsub Hooks
 -export([ on_message_publish/2
-        , on_message_puback/4
+        , on_message_puback/5
         , on_message_delivered/3
         , on_message_acked/3
         , on_message_dropped/4
@@ -167,13 +167,12 @@ on_message_publish(Message, _Env) ->
     io:format("Publish ~p~n", [emqx_message:to_map(Message)]),
     {ok, Message}.
 
-on_message_puback(_PacketId, #message{topic = _Topic} = Message, PubRes, _Env) ->
-    NewRC = case PubRes of
+on_message_puback(_PacketId, #message{topic = _Topic} = Message, _PubRes, RC, _Env) ->
+    NewRC = case RC of
                 %% Demo: some service do not want to expose the error code (129) to client;
                 %% so here it remap 129 to 128
                 129 -> 128;
-                _ ->
-                    PubRes
+                _ -> RC
             end,
     io:format("Puback ~p RC: ~p~n",
               [emqx_message:to_map(Message), NewRC]),
