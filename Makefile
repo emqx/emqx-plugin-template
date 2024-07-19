@@ -52,3 +52,17 @@ distclean:
 .PHONY: rel
 rel: $(REBAR)
 	$(REBAR) emqx_plugrel tar
+
+.PHONY: fmt
+fmt: $(REBAR)
+	@find . \( -name '*.app.src' -o \
+				-name '*.erl' -o \
+				-name '*.hrl' -o \
+				-name 'rebar.config' -o \
+				-name '*.eterm' -o \
+				-name '*.escript' \) \
+				-not -path '*/_build/*' \
+				-not -path '*/deps/*' \
+				-not -path '*/_checkouts/*' \
+				-type f \
+		| xargs | $(REBAR) fmt --verbose -w

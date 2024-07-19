@@ -16,5 +16,11 @@ In a shell from this plugin's working directory execute `make rel` to have the p
 ```
 _build/default/emqx_plugrel/emqx_plugin_template-<vsn>.tar.gz
 ```
+## Format
+
+Format all the files in your project by running:
+```
+make fmt
+```
 
 See [EMQX documentation](https://docs.emqx.com/en/enterprise/v5.0/extensions/plugins.html) for details on how to deploy custom plugins.
