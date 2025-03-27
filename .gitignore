@@ -31,3 +31,5 @@ erlang_ls.config
 *#
 # For direnv
 .envrc
+
+my_emqx_plugin*

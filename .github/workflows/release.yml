@@ -4,40 +4,42 @@ on:
   push:
     tags:
       - "*"
+
 jobs:
   build_release:
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/emqx/emqx-builder/5.3-2:1.15.7-26.2.1-2-ubuntu22.04
+      image: ghcr.io/emqx/emqx-builder/5.4-4:1.17.3-27.2-2-ubuntu24.04
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: build release
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: setup rebar3 template
         run: |
           git config --global --add safe.directory "$(pwd)"
           mkdir -p ~/.config/rebar3/templates
           cp -r . ~/.config/rebar3/templates
-          rebar3 new emqx-plugin my_emqx_plugin version=5.1.0
-          ./check-vsn.sh my_emqx_plugin
-          make -C my_emqx_plugin rel
 
-      - uses: actions/upload-artifact@v2
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: build plugins
+        run: |
+          mkdir -p build
+          ./build_sample_plugin.sh --tag ${{ github.ref_name }} --name my_emqx_plugin_avsc --with-avsc --output-dir build
+          ./build_sample_plugin.sh --tag ${{ github.ref_name }} --name my_emqx_plugin --output-dir build
+      - uses: actions/upload-artifact@v4
         with:
           name: packages
           path: |
-            my_emqx_plugin/_build/default/emqx_plugrel/*.tar.gz
+            build/*.tar.gz
 
   release:
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     needs:
       - build_release
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: packages
           path: packages
@@ -47,12 +49,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: EMQX5 Example Plugin ${{ github.ref }} Released
-          body: EMQX5 Example Plugin ${{ github.ref }} Released
+          release_name: EMQX5 Example Plugin ${{ github.ref_name }} Released
+          body: EMQX5 Example Plugin ${{ github.ref_name }} Released
           draft: false
           prerelease: false
       - uses: Rory-Z/upload-release-asset@v1
         with:
           repo: emqx-plugin-template
-          path: "packages/*"
+          path: "packages/*.tar.gz"
           token: ${{ github.token }}
