@@ -7,5 +7,5 @@
 ## Keep using OTP 25.3.2 for docker image
 ## see also
 ## https://github.com/emqx/emqx/blob/v5.6.0/build#L400-L401
-erlang 25.3.2-2
-elixir 1.15.7-otp-25
+erlang 27.2-2
+elixir 1.18.3-otp-27
