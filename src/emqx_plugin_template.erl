@@ -6,42 +6,50 @@
 -include_lib("emqx/include/emqx.hrl").
 -include_lib("emqx/include/emqx_hooks.hrl").
 
-
 %% for logging
 -include_lib("emqx/include/logger.hrl").
 
--export([ load/1
-        , unload/0
-        ]).
+-export([
+    load/1,
+    unload/0
+]).
+
+-export([
+    on_config_changed/2,
+    on_health_check/1
+]).
 
 %% Client Lifecycle Hooks
--export([ on_client_connect/3
-        , on_client_connack/4
-        , on_client_connected/3
-        , on_client_disconnected/4
-        , on_client_authenticate/3
-        , on_client_authorize/5
-        , on_client_subscribe/4
-        , on_client_unsubscribe/4
-        ]).
+-export([
+    on_client_connect/3,
+    on_client_connack/4,
+    on_client_connected/3,
+    on_client_disconnected/4,
+    on_client_authenticate/3,
+    on_client_authorize/5,
+    on_client_subscribe/4,
+    on_client_unsubscribe/4
+]).
 
 %% Session Lifecycle Hooks
--export([ on_session_created/3
-        , on_session_subscribed/4
-        , on_session_unsubscribed/4
-        , on_session_resumed/3
-        , on_session_discarded/3
-        , on_session_takenover/3
-        , on_session_terminated/4
-        ]).
+-export([
+    on_session_created/3,
+    on_session_subscribed/4,
+    on_session_unsubscribed/4,
+    on_session_resumed/3,
+    on_session_discarded/3,
+    on_session_takenover/3,
+    on_session_terminated/4
+]).
 
 %% Message Pubsub Hooks
--export([ on_message_publish/2
-        , on_message_puback/5
-        , on_message_delivered/3
-        , on_message_acked/3
-        , on_message_dropped/4
-        ]).
+-export([
+    on_message_publish/2,
+    on_message_puback/5,
+    on_message_delivered/3,
+    on_message_acked/3,
+    on_message_dropped/4
+]).
 
 %% Called when the plugin application start
 load(Env) ->
@@ -84,17 +92,23 @@ on_client_connect(ConnInfo, Props, _Env) ->
     {ok, Props}.
 
 on_client_connack(ConnInfo = #{clientid := ClientId}, Rc, Props, _Env) ->
-    io:format("Client(~s) connack, ConnInfo: ~p, Rc: ~p, Props: ~p~n",
-              [ClientId, ConnInfo, Rc, Props]),
+    io:format(
+        "Client(~s) connack, ConnInfo: ~p, Rc: ~p, Props: ~p~n",
+        [ClientId, ConnInfo, Rc, Props]
+    ),
     {ok, Props}.
 
 on_client_connected(ClientInfo = #{clientid := ClientId}, ConnInfo, _Env) ->
-    io:format("Client(~s) connected, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
-              [ClientId, ClientInfo, ConnInfo]).
+    io:format(
+        "Client(~s) connected, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
+        [ClientId, ClientInfo, ConnInfo]
+    ).
 
 on_client_disconnected(ClientInfo = #{clientid := ClientId}, ReasonCode, ConnInfo, _Env) ->
-    io:format("Client(~s) disconnected due to ~p, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
-              [ClientId, ReasonCode, ClientInfo, ConnInfo]).
+    io:format(
+        "Client(~s) disconnected due to ~p, ClientInfo:~n~p~n, ConnInfo:~n~p~n",
+        [ClientId, ReasonCode, ClientInfo, ConnInfo]
+    ).
 
 %% @doc
 %% - Return `{stop, ok}' if this client is to be allowed to login.
@@ -102,10 +116,12 @@ on_client_disconnected(ClientInfo = #{clientid := ClientId}, ReasonCode, ConnInf
 %% - Return `ignore' if this client is to be authenticated by other plugins
 %% or EMQX's built-in authenticators.
 on_client_authenticate(ClientInfo = #{clientid := ClientId}, DefaultResult, Env) ->
-    io:format("Client(~s) authenticate, ClientInfo:~n~p~n"
-              "DefaultResult:~p~n"
-              "Env:~p~n",
-              [ClientId, ClientInfo, DefaultResult, Env]),
+    io:format(
+        "Client(~s) authenticate, ClientInfo:~n~p~n"
+        "DefaultResult:~p~n"
+        "Env:~p~n",
+        [ClientId, ClientInfo, DefaultResult, Env]
+    ),
     DefaultResult.
 
 %% @doc
@@ -113,10 +129,12 @@ on_client_authenticate(ClientInfo = #{clientid := ClientId}, DefaultResult, Env)
 %% - Return `ignore' if this client is to be authorized by other plugins or
 %% EMQX's built-in authorization sources.
 on_client_authorize(ClientInfo = #{clientid := ClientId}, PubSub, Topic, DefaultResult, Env) ->
-    io:format("Client(~s) authorize, ClientInfo:~n~p~n"
-              "~p to topic (~p) DefaultResult:~p~n"
-              "Env:~p~n",
-              [ClientId, ClientInfo, PubSub, Topic, DefaultResult, Env]),
+    io:format(
+        "Client(~s) authorize, ClientInfo:~n~p~n"
+        "~p to topic (~p) DefaultResult:~p~n"
+        "Env:~p~n",
+        [ClientId, ClientInfo, PubSub, Topic, DefaultResult, Env]
+    ),
     %% `from' is for logging
     Result = #{result => allow, from => ?MODULE},
     {stop, Result}.
@@ -152,8 +170,10 @@ on_session_takenover(_ClientInfo = #{clientid := ClientId}, SessInfo, _Env) ->
     io:format("Session(~s) is takenover. Session Info: ~p~n", [ClientId, SessInfo]).
 
 on_session_terminated(_ClientInfo = #{clientid := ClientId}, Reason, SessInfo, _Env) ->
-    io:format("Session(~s) is terminated due to ~p~nSession Info: ~p~n",
-              [ClientId, Reason, SessInfo]).
+    io:format(
+        "Session(~s) is terminated due to ~p~nSession Info: ~p~n",
+        [ClientId, Reason, SessInfo]
+    ).
 
 %%--------------------------------------------------------------------
 %% Message PubSub Hooks
@@ -162,59 +182,67 @@ on_session_terminated(_ClientInfo = #{clientid := ClientId}, Reason, SessInfo, _
 %% Transform message and return
 on_message_publish(Message = #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
     {ok, Message};
-
 on_message_publish(Message, _Env) ->
     io:format("Publish ~p~n", [emqx_message:to_map(Message)]),
     {ok, Message}.
 
 on_message_puback(_PacketId, #message{topic = _Topic} = Message, _PubRes, RC, _Env) ->
-    NewRC = case RC of
-                %% Demo: some service do not want to expose the error code (129) to client;
-                %% so here it remap 129 to 128
-                129 -> 128;
-                _ -> RC
-            end,
-    io:format("Puback ~p RC: ~p~n",
-              [emqx_message:to_map(Message), NewRC]),
+    NewRC =
+        case RC of
+            %% Demo: some service do not want to expose the error code (129) to client;
+            %% so here it remap 129 to 128
+            129 -> 128;
+            _ -> RC
+        end,
+    io:format(
+        "Puback ~p RC: ~p~n",
+        [emqx_message:to_map(Message), NewRC]
+    ),
     {ok, NewRC}.
 
 on_message_dropped(#message{topic = <<"$SYS/", _/binary>>}, _By, _Reason, _Env) ->
     ok;
 on_message_dropped(Message, _By = #{node := Node}, Reason, _Env) ->
-    io:format("Message dropped by node ~p due to ~p:~n~p~n",
-              [Node, Reason, emqx_message:to_map(Message)]).
+    io:format(
+        "Message dropped by node ~p due to ~p:~n~p~n",
+        [Node, Reason, emqx_message:to_map(Message)]
+    ).
 
 on_message_delivered(_ClientInfo = #{clientid := ClientId}, Message, _Env) ->
-    io:format("Message delivered to client(~s):~n~p~n",
-              [ClientId, emqx_message:to_map(Message)]),
+    io:format(
+        "Message delivered to client(~s):~n~p~n",
+        [ClientId, emqx_message:to_map(Message)]
+    ),
     {ok, Message}.
 
 on_message_acked(_ClientInfo = #{clientid := ClientId}, Message, _Env) ->
-    io:format("Message acked by client(~s):~n~p~n",
-              [ClientId, emqx_message:to_map(Message)]).
+    io:format(
+        "Message acked by client(~s):~n~p~n",
+        [ClientId, emqx_message:to_map(Message)]
+    ).
 
 %% Called when the plugin application stop
 unload() ->
-    unhook('client.connect',      {?MODULE, on_client_connect}),
-    unhook('client.connack',      {?MODULE, on_client_connack}),
-    unhook('client.connected',    {?MODULE, on_client_connected}),
+    unhook('client.connect', {?MODULE, on_client_connect}),
+    unhook('client.connack', {?MODULE, on_client_connack}),
+    unhook('client.connected', {?MODULE, on_client_connected}),
     unhook('client.disconnected', {?MODULE, on_client_disconnected}),
     unhook('client.authenticate', {?MODULE, on_client_authenticate}),
-    unhook('client.authorize',    {?MODULE, on_client_authorize}),
-    unhook('client.subscribe',    {?MODULE, on_client_subscribe}),
-    unhook('client.unsubscribe',  {?MODULE, on_client_unsubscribe}),
-    unhook('session.created',     {?MODULE, on_session_created}),
-    unhook('session.subscribed',  {?MODULE, on_session_subscribed}),
-    unhook('session.unsubscribed',{?MODULE, on_session_unsubscribed}),
-    unhook('session.resumed',     {?MODULE, on_session_resumed}),
-    unhook('session.discarded',   {?MODULE, on_session_discarded}),
-    unhook('session.takenover',   {?MODULE, on_session_takenover}),
-    unhook('session.terminated',  {?MODULE, on_session_terminated}),
-    unhook('message.publish',     {?MODULE, on_message_publish}),
-    unhook('message.puback',      {?MODULE, on_message_puback}),
-    unhook('message.delivered',   {?MODULE, on_message_delivered}),
-    unhook('message.acked',       {?MODULE, on_message_acked}),
-    unhook('message.dropped',     {?MODULE, on_message_dropped}).
+    unhook('client.authorize', {?MODULE, on_client_authorize}),
+    unhook('client.subscribe', {?MODULE, on_client_subscribe}),
+    unhook('client.unsubscribe', {?MODULE, on_client_unsubscribe}),
+    unhook('session.created', {?MODULE, on_session_created}),
+    unhook('session.subscribed', {?MODULE, on_session_subscribed}),
+    unhook('session.unsubscribed', {?MODULE, on_session_unsubscribed}),
+    unhook('session.resumed', {?MODULE, on_session_resumed}),
+    unhook('session.discarded', {?MODULE, on_session_discarded}),
+    unhook('session.takenover', {?MODULE, on_session_takenover}),
+    unhook('session.terminated', {?MODULE, on_session_terminated}),
+    unhook('message.publish', {?MODULE, on_message_publish}),
+    unhook('message.puback', {?MODULE, on_message_puback}),
+    unhook('message.delivered', {?MODULE, on_message_delivered}),
+    unhook('message.acked', {?MODULE, on_message_acked}),
+    unhook('message.dropped', {?MODULE, on_message_dropped}).
 
 hook(HookPoint, MFA) ->
     %% use highest hook priority so this module's callbacks
@@ -223,3 +251,58 @@ hook(HookPoint, MFA) ->
 
 unhook(HookPoint, MFA) ->
     emqx_hooks:del(HookPoint, MFA).
+
+%%--------------------------------------------------------------------
+%% Lifecycle Callbacks
+%%--------------------------------------------------------------------
+
+%% @doc
+%% - Return `{error, Error}' if the new config is invalid.
+%% - Return `ok' if the config is valid and can be accepted.
+%%
+%% NOTE
+%% For demonstration, we accept only localhost as host value.
+on_config_changed(_OldConfig, #{<<"hostname">> := <<"localhost">>} = _NewConfig) ->
+    ok;
+on_config_changed(_OldConfig, #{<<"hostname">> := Host} = _NewConfig) ->
+    Error = <<"Invalid host: ", Host/binary>>,
+    {error, Error};
+on_config_changed(_OldConfig, _NewConfig) ->
+    {error, <<"Invalid config, no host">>}.
+
+%% @doc
+%% - Return `{error, Error}' if the health check fails.
+%% - Return `ok' if the health check passes.
+%%
+%% NOTE
+%% For demonstration, we consider any port number other than 3306 unavailable.
+on_health_check(_Options) ->
+    case get_config() of
+        #{<<"port">> := 3306} ->
+            ok;
+        #{<<"port">> := Port} ->
+            {error, <<"Port unavailable: ", Port/binary>>};
+        _ ->
+            {error, <<"Invalid config, no port">>}
+    end.
+
+%%--------------------------------------------------------------------
+%% Internal Functions
+%%--------------------------------------------------------------------
+
+get_config() ->
+    NameBin = atom_to_binary(?MODULE, utf8),
+    Plugins = lists:filter(
+        fun
+            (#{name := NB}) when NB =:= NameBin -> true;
+            (_) -> false
+        end,
+        emqx_plugins:list()
+    ),
+    case Plugins of
+        [#{rel_vsn := RelVsn}] ->
+            NameVsn = <<NameBin/binary, "-", RelVsn/binary>>,
+            emqx_plugins:get_config(NameVsn);
+        _ ->
+            #{}
+    end.
