@@ -281,7 +281,7 @@ on_health_check(_Options) ->
         #{<<"port">> := 3306} ->
             ok;
         #{<<"port">> := Port} ->
-            {error, <<"Port unavailable: ", Port/binary>>};
+            {error, iolist_to_binary(io_lib:format("Port unavailable: ~p", [Port]))};
         _ ->
             {error, <<"Invalid config, no port">>}
     end.
