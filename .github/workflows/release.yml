@@ -9,24 +9,19 @@ jobs:
   build_release:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/emqx/emqx-builder/5.4-4:1.17.3-27.2-2-ubuntu24.04
     steps:
       - uses: actions/checkout@v2
+      - name: Setup Erlang
+        uses: erlef/setup-beam@v1
         with:
-          fetch-depth: 0
-
-      - name: setup rebar3 template
-        run: |
-          git config --global --add safe.directory "$(pwd)"
-          mkdir -p ~/.config/rebar3/templates
-          cp -r . ~/.config/rebar3/templates
-
+          version-file: emqx-plugin-templates/.tool-versions
+          version-type: strict
+      - name: Install rebar3 template
+        run: make install-rebar-template
       - name: build plugins
         run: |
-          mkdir -p build
-          ./build_sample_plugin.sh --tag ${{ github.ref_name }} --name my_emqx_plugin_avsc --with-avsc --output-dir build
-          ./build_sample_plugin.sh --tag ${{ github.ref_name }} --name my_emqx_plugin --output-dir build
+          ./scripts/build-sample-plugin.sh --tag ${{ github.ref_name }} --name my_emqx_plugin_avsc --with-avsc --output-dir build
+          ./scripts/build-sample-plugin.sh --tag ${{ github.ref_name }} --name my_emqx_plugin --output-dir build
       - uses: actions/upload-artifact@v4
         with:
           name: packages

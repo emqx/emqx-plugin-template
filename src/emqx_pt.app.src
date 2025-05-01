@@ -1,0 +1,10 @@
+{application, emqx_pt, [
+    {description, "EMQX Plugin Template"},
+    {vsn, "1.0.0"},
+    {modules, []},
+    {registered, []},
+    {applications, [kernel, stdlib]},
+    {env, []},
+    {licenses, ["Apache 2.0"]},
+    {maintainers, ["EMQX <contact@emqx.io>"]}
+]}.

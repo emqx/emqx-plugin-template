@@ -3,6 +3,11 @@
   "name": "ExtendedConfig",
   "fields": [
     {
+      "name": "client_regex",
+      "type": "string",
+      "default": "^[A-Za-z0-9_]+$"
+    },
+    {
       "name": "hostname",
       "type": "string",
       "default": "localhost"
