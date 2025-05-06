@@ -11,25 +11,25 @@
 {dir, "{{name}}/src"}.
 {dir, "{{name}}/priv"}.
 {dir, "{{name}}/scripts"}.
-{file, ".tool-versions", "{{name}}/.tool-versions"}.
-{file, "LICENSE", "{{name}}/LICENSE"}.
-{file, "Makefile", "{{name}}/Makefile"}.
-{file, "erlang_ls.config", "{{name}}/erlang_ls.config"}.
+{file, "emqx-plugin-templates/.tool-versions", "{{name}}/.tool-versions"}.
+{file, "emqx-plugin-templates/LICENSE", "{{name}}/LICENSE"}.
+{file, "emqx-plugin-templates/Makefile", "{{name}}/Makefile"}.
+{file, "emqx-plugin-templates/erlang_ls.config", "{{name}}/erlang_ls.config"}.
 
-{file, "priv/config.hocon.example", "{{name}}/priv/config.hocon.example"}.
-{file, "priv/config_schema.avsc.enterprise.example", "{{name}}/priv/config_schema.avsc.enterprise.example"}.
-{file, "priv/config_schema.avsc.example", "{{name}}/priv/config_schema.avsc.example"}.
-{file, "priv/config_i18n.json.example", "{{name}}/priv/config_i18n.json.example"}.
+{file, "emqx-plugin-templates/priv/config.hocon.example", "{{name}}/priv/config.hocon.example"}.
+{file, "emqx-plugin-templates/priv/config_schema.avsc.enterprise.example", "{{name}}/priv/config_schema.avsc.enterprise.example"}.
+{file, "emqx-plugin-templates/priv/config_schema.avsc.example", "{{name}}/priv/config_schema.avsc.example"}.
+{file, "emqx-plugin-templates/priv/config_i18n.json.example", "{{name}}/priv/config_i18n.json.example"}.
 
-{file, "scripts/ensure-rebar3.sh", "{{name}}/scripts/ensure-rebar3.sh"}.
-{file, "scripts/get-otp-vsn.sh", "{{name}}/scripts/get-otp-vsn.sh"}.
-{file, "gitignore_template", "{{name}}/.gitignore"}.
+{file, "emqx-plugin-templates/scripts/ensure-rebar3.sh", "{{name}}/scripts/ensure-rebar3.sh"}.
+{file, "emqx-plugin-templates/scripts/get-otp-vsn.sh", "{{name}}/scripts/get-otp-vsn.sh"}.
+{file, "emqx-plugin-templates/.gitignore", "{{name}}/.gitignore"}.
 {chmod, "{{name}}/scripts/ensure-rebar3.sh", 8#755}.
 {chmod, "{{name}}/scripts/get-otp-vsn.sh", 8#755}.
-{template, "README_template.md", "{{name}}/README.md"}.
-{template, "rebar_template.config", "{{name}}/rebar.config"}.
-{template, "src/emqx_plugin_template.app.src", "{{name}}/src/{{name}}.app.src"}.
-{template, "src/emqx_plugin_template.erl", "{{name}}/src/{{name}}.erl"}.
-{template, "src/emqx_plugin_template_app.erl", "{{name}}/src/{{name}}_app.erl"}.
-{template, "src/emqx_plugin_template_cli.erl", "{{name}}/src/{{name}}_cli.erl"}.
-{template, "src/emqx_plugin_template_sup.erl", "{{name}}/src/{{name}}_sup.erl"}.
+{template, "emqx-plugin-templates/README.md", "{{name}}/README.md"}.
+{template, "emqx-plugin-templates/rebar.config", "{{name}}/rebar.config"}.
+{template, "emqx-plugin-templates/src/emqx_plugin_template.app.src", "{{name}}/src/{{name}}.app.src"}.
+{template, "emqx-plugin-templates/src/emqx_plugin_template.erl", "{{name}}/src/{{name}}.erl"}.
+{template, "emqx-plugin-templates/src/emqx_plugin_template_app.erl", "{{name}}/src/{{name}}_app.erl"}.
+{template, "emqx-plugin-templates/src/emqx_plugin_template_cli.erl", "{{name}}/src/{{name}}_cli.erl"}.
+{template, "emqx-plugin-templates/src/emqx_plugin_template_sup.erl", "{{name}}/src/{{name}}_sup.erl"}.

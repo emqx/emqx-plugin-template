@@ -1,0 +1,24 @@
+services:
+  emqx:
+    image: emqx/emqx-enterprise:5.9.0
+    container_name: emqx
+    environment:
+      EMQX_LOG__CONSOLE__LEVEL: debug
+      EMQX_API_KEY__BOOTSTRAP_FILE: "/opt/emqx-bootstrap/api-keys.txt"
+    ports:
+      - "1883:1883"
+      - "8083:8083"
+      - "18083:18083"
+    networks:
+      - emqx_network
+    healthcheck:
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
+      interval: 5s
+      timeout: 25s
+      retries: 5
+    volumes:
+      - ./assets/api-keys.txt:/opt/emqx-bootstrap/api-keys.txt:ro
+
+networks:
+  emqx_network:
+    driver: bridge

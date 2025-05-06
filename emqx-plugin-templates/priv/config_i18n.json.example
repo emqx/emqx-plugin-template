@@ -1,4 +1,12 @@
 {
+  "$client_regex_label": {
+    "zh": "客户端正则表达式",
+    "en": "Client Regex"
+  },
+  "$client_regex_desc": {
+    "zh": "一个正则表达式，用于验证客户端ID。",
+    "en": "A regex used to validate the clientid."
+  },
   "$hostname_label": {
     "zh": "主机名",
     "en": "Hostname"

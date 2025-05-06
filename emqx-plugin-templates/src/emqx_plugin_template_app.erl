@@ -17,14 +17,13 @@
 
 start(_StartType, _StartArgs) ->
     {ok, Sup} = @@name@@_sup:start_link(),
-    @@name@@:load(application:get_all_env()),
-
+    @@name@@:hook(),
     emqx_ctl:register_command(@@name@@, {@@name@@_cli, cmd}),
     {ok, Sup}.
 
 stop(_State) ->
     emqx_ctl:unregister_command(@@name@@),
-    @@name@@:unload().
+    @@name@@:unhook().
 
 on_config_changed(OldConfig, NewConfig) ->
     @@name@@:on_config_changed(OldConfig, NewConfig).

@@ -1,15 +1,15 @@
-export BUILD_WITHOUT_QUIC ?= true
-export BUILD_WITHOUT_ROCKSDB ?= true
-
-## shallow clone for speed
-export REBAR_GIT_CLONE_OPTIONS += --depth=1
+## to build emqtt without QUIC
+export BUILD_WITHOUT_QUIC = 1
 
 ## Feature Used in rebar plugin emqx_plugrel
 ## The Feature have not enabled by default on OTP25
 export ERL_FLAGS ?= -enable-feature maybe_expr
+export DOCKER_COMPOSE_FILE = $(CURDIR)/.ci/docker-compose.yml
 
 REBAR = $(CURDIR)/rebar3
 SCRIPTS = $(CURDIR)/scripts
+
+TEST_ASSETS_DIR = $(CURDIR)/_build/test/lib/emqx_pt/test/assets
 
 .PHONY: all
 all: compile
@@ -21,48 +21,49 @@ ensure-rebar3:
 $(REBAR):
 	$(MAKE) ensure-rebar3
 
-.PHONY: compile
-compile: $(REBAR)
-	$(REBAR) compile
-
 .PHONY: ct
 ct: $(REBAR)
-	$(REBAR) as test ct -v
-
-.PHONY: eunit
-eunit: $(REBAR)
-	$(REBAR) as test eunit
-
-.PHONY: xref
-xref: $(REBAR)
-	$(REBAR) xref
-
-.PHONY: cover
-cover: $(REBAR)
-	$(REBAR) cover
+	$(REBAR) as test ct -v --readable=true
 
 .PHONY: clean
-clean: distclean
-
-.PHONY: distclean
-distclean:
+clean: clean
 	@rm -rf _build
-	@rm -f data/app.*.config data/vm.*.args rebar.lock
+	@rm -f rebar.lock
 
-.PHONY: rel
-rel: $(REBAR)
-	$(REBAR) emqx_plugrel tar
+.PHONY: install-rebar-template
+install-rebar-template:
+	$(SCRIPTS)/install-rebar-template.sh
+
+.PHONY: build-test-plugins
+build-test-plugins:
+	$(SCRIPTS)/build-sample-plugin.sh --tag 1.0.0 --name my_emqx_plugin_avsc --with-avsc --output-dir $(TEST_ASSETS_DIR)
+	$(SCRIPTS)/build-sample-plugin.sh --tag 1.0.0 --name my_emqx_plugin --output-dir $(TEST_ASSETS_DIR)
+
+.PHONY: build-plugin
+build-plugin:
+	$(SCRIPTS)/build-sample-plugin.sh --tag $(PLUGIN_VSN) --name $(PLUGIN_NAME) --with-avsc --output-dir $(PLUGIN_DIR)
 
 .PHONY: fmt
 fmt: $(REBAR)
-	@find . \( -name '*.app.src' -o \
-				-name '*.erl' -o \
-				-name '*.hrl' -o \
-				-name 'rebar.config' -o \
-				-name '*.eterm' -o \
-				-name '*.escript' \) \
-				-not -path '*/_build/*' \
-				-not -path '*/deps/*' \
-				-not -path '*/_checkouts/*' \
-				-type f \
-		| xargs | $(REBAR) fmt --verbose -w
+	$(REBAR) fmt --verbose -w
+
+.PHONY: fmt-check
+fmt-check: $(REBAR)
+	$(REBAR) fmt --verbose --check
+
+.PHONY: fmt-template
+fmt-template: $(REBAR)
+	./scripts/format-template-code.sh
+
+.PHONY: fmt-template-check
+fmt-template-check: $(REBAR)
+	./scripts/format-template-code.sh --check
+
+.PHONY: up
+up:
+	docker compose -f .ci/docker-compose.yml up --detach --build --force-recreate
+
+.PHONY: down
+down:
+	docker compose -f .ci/docker-compose.yml down --volumes
+

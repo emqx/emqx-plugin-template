@@ -1,0 +1,12 @@
+{{=@@ @@=}}
+{application, @@name@@, [
+    {description, "@@description@@"},
+    {vsn, "@@app_vsn@@"},
+    {modules, []},
+    {registered, [@@name@@_sup]},
+    {applications, [kernel, stdlib, emqx_plugin_helper, map_sets]},
+    {mod, {@@name@@_app, []}},
+    {env, []},
+    {licenses, ["@@license@@"]},
+    {maintainers, ["@@author_name@@ <@@author_email@@>"]}
+]}.

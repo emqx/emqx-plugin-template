@@ -14,7 +14,7 @@ An EMQX plugin release is a tar file including including a subdirectory of this 
 In a shell from this plugin's working directory execute `make rel` to have the package created like:
 
 ```
-_build/default/emqx_plugrel/emqx_plugin_template-<vsn>.tar.gz
+_build/default/emqx_plugrel/@@name@@-<vsn>.tar.gz
 ```
 ## Format
 

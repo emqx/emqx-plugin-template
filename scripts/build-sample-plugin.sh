@@ -44,14 +44,16 @@ if [ -z "$NAME" ]; then
   exit 1
 fi
 
-if [ -z "$OUTPUT_DIR" ]; then
-  echo "Error: --output-dir argument is required"
-  exit 1
-fi
+cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
 
-set -x
+echo "Installing rebar template"
 
-rebar3 new emqx-plugin "$NAME" version="$TAG"
+./scripts/install-rebar-template.sh
+
+echo "Creating plugin"
+
+rm -rf "$NAME"
+./rebar3 new emqx-plugin "$NAME" version="$TAG"
 
 mv "$NAME/priv/config.hocon.example" "$NAME/priv/config.hocon"
 
@@ -60,7 +62,15 @@ if [ "$WITH_AVSC" = true ]; then
   mv "$NAME/priv/config_i18n.json.example" "$NAME/priv/config_i18n.json"
 fi
 
+echo "Building plugin"
 export BUILD_WITHOUT_QUIC=1
 make -C "$NAME" rel
 
-cp "$NAME"/_build/default/emqx_plugrel/*.tar.gz "$OUTPUT_DIR"
+echo "Copying plugin to $OUTPUT_DIR"
+if [ -n "$OUTPUT_DIR" ]; then
+  mkdir -p "$OUTPUT_DIR"
+  cp "$NAME"/_build/default/emqx_plugrel/*.tar.gz "$OUTPUT_DIR"
+fi
+
+echo "Cleaning up"
+rm -rf "$NAME"

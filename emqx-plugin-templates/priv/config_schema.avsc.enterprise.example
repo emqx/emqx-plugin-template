@@ -3,6 +3,18 @@
   "name": "ExtendedConfig",
   "fields": [
     {
+      "name": "client_regex",
+      "type": "string",
+      "default": "^[A-Za-z0-9_]+$",
+      "$ui": {
+        "component": "input",
+        "flex": 12,
+        "required": true,
+        "label": "$client_regex_label",
+        "description": "$client_regex_desc"
+      }
+    },
+    {
       "name": "hostname",
       "type": "string",
       "default": "localhost",

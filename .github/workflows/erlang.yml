@@ -9,20 +9,29 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
-    container:
-      image: ghcr.io/emqx/emqx-builder/5.3-5:1.15.7-26.2.1-2-ubuntu22.04
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Create Plugin Project
-      run: |
-        mkdir -p ~/.config/rebar3/templates
-        cp -r . ~/.config/rebar3/templates
-        rebar3 new emqx-plugin my_emqx_plugin
-    - name: Xref
-      run: make -C my_emqx_plugin xref
-    - name: Make release
-      run: make -C my_emqx_plugin rel
+    - uses: actions/checkout@v4
+      ## We purposely do not use docker image for building,
+      ## thus verifying that .tool-versions is suitable for developing a plugin.
+    - name: Setup Erlang
+      uses: erlef/setup-beam@v1
+      with:
+        version-file: emqx-plugin-templates/.tool-versions
+        version-type: strict
+    - name: Check template code formatting
+      run: make fmt-template-check
+    - name: Check formatting of the project code (tests, rebar.config, etc)
+      run: make fmt-check
+    - name: Install rebar3 template
+      run: make install-rebar-template
+    - name: Build test plugins
+      run: make build-test-plugins
+    - name: Start EMQX
+      run: make up
+    - name: Run tests
+      run: make ct
+    - name: Stop EMQX
+      if: always()
+      run: make down
+

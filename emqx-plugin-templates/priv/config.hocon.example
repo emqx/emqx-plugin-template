@@ -1,6 +1,11 @@
 ## This is a demo config in HOCON format
 ## The same format used by EMQX since 5.0
 
+client_regex = "^[A-Za-z0-9_]+$"
+
+## The following parameters are not used by the demo plugin,
+## they are just to demonstrate the format of the config and the schema
+
 hostname = "localhost"
 port = 3306
 

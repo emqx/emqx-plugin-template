@@ -31,5 +31,6 @@ erlang_ls.config
 *#
 # For direnv
 .envrc
+test/assets/*.tar.gz
 
 my_emqx_plugin*

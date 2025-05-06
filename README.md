@@ -1,3 +1,5 @@
+[![Erlang CI](https://github.com/emqx/emqx-plugin-template/actions/workflows/erlang.yml/badge.svg)](https://github.com/emqx/emqx-plugin-template/actions/workflows/erlang.yml)
+
 # EMQX Plugin Template
 
 This is a [rebar3 template](https://rebar3.org/docs/tutorials/templates/#custom-templates) to ease creation of [EMQX](https://github.com/emqx/emqx) v5 Plugins in [Erlang](https://www.erlang.org/).
@@ -394,10 +396,11 @@ Usually we want the hooks to be enabled/disabled together with the plugin, so we
 start(_StartType, _StartArgs) ->
     {ok, Sup} = my_emqx_plugin_sup:start_link(),
     my_emqx_plugin:hook(),
-
+    emqx_ctl:register_command(my_emqx_plugin, {my_emqx_plugin_cli, cmd}),
     {ok, Sup}.
 
 stop(_State) ->
+    emqx_ctl:unregister_command(my_emqx_plugin),
     my_emqx_plugin:unhook().
 ```
 
@@ -425,21 +428,24 @@ So we may implement some callback functions in the following way:
 
 ```erlang
 %% Only allow connections with client IDs that match any of the characters: A-Z, a-z, 0-9, and underscore.
-on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result) ->
-  case re:run(ClientId, "^[A-Za-z0-9_]+$", [{capture, none}]) of
-    match -> {ok, Result};
-    nomatch -> {stop, {error, banned}}
-  end.
-%% Clients can only subscribe to topics formatted as /room/{clientid}, but can send messages to any topics.
-on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Result) ->
-  case emqx_topic:match(Topic, <<"/room/", ClientId/binary>>) of
-    true -> {ok, Result};
-    false -> stop
-  end;
-on_client_authorize(_ClientInfo, _Pub, _Topic, Result) -> {ok, Result}.
-```
+on_client_authenticate(#{clientid := ClientId} = _ClientInfo, DefaultResult) ->
+    ClientIdRE = "^[A-Za-z0-9_]+$",
+    case re:run(ClientId, ClientIdRE, [{capture, none}]) of
+        match -> {ok, DefaultResult};
+        nomatch -> {stop, {error, bad_username_or_password}}
+    end.
 
-In the skeleton app, we register sample hooks via `my_emqx_plugin:load/1` and unregister them via `my_emqx_plugin:unload/0` functions.
+%% Clients can only subscribe to topics formatted as /room/{clientid}, but can send messages to any topics.
+on_client_authorize(
+    _ClientInfo = #{clientid := ClientId}, #{action_type := subscribe} = Action, Topic, _Result
+) ->
+    case emqx_topic:match(Topic, <<"room/", ClientId/binary>>) of
+        true -> ignore;
+        false -> {stop, #{result => deny, from => ?MODULE}}
+    end;
+on_client_authorize(_ClientInfo = #{clientid := ClientId}, Action, Topic, _Result) ->
+    ignore.
+```
 
 ### Handling configuration updates
 
@@ -456,13 +462,13 @@ To react to the configuration changes, we should only do something if the plugin
 So the pattern is usually the following:
 
 * On application start, we start some `gen_server` process to handle the configuration.
-* The process is registered under some name, e.g. `my_emqx_plugin_config_server`.
-* The process reads the current configuration on start (see `my_emqx_plugin:get_config/0` in the skeleton app)
+* The process is registered under some name, e.g. `my_emqx_plugin`.
+* The process reads the current configuration on start (see `my_emqx_plugin:init/1` in the skeleton app)
 and initializes its state.
 * `on_config_changed/2` callback function
     ** validates the new configuration
-    ** casts a message to the `my_emqx_plugin_config_server` with the new configuration.
-* The `my_emqx_plugin_config_server` process
+    ** casts a message to the `my_emqx_plugin` with the new configuration.
+* The `my_emqx_plugin` process
     ** if started, updates its state and reacts to the configuration changes
     ** if stopped (together with the application), nothing happens.
 
