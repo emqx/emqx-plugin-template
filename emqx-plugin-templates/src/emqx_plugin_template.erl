@@ -2,7 +2,7 @@
 -module(@@name@@).
 
 -define(PLUGIN_NAME, "@@name@@").
--define(PLUGIN_VSN, "1.0.0").
+-define(PLUGIN_VSN, "@@version@@").
 
 %% for #message{} record
 %% no need for this include if we call emqx_message:to_map/1 to convert it to a map
