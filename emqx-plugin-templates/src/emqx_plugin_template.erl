@@ -272,4 +272,5 @@ handle_info(_Request, State) ->
     {noreply, State}.
 
 terminate(_Reason, _State) ->
+    persistent_term:erase(?MODULE),
     ok.
