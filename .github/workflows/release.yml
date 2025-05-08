@@ -16,6 +16,8 @@ jobs:
         with:
           version-file: emqx-plugin-templates/.tool-versions
           version-type: strict
+      - name: Ensure rebar3
+        run: make ensure-rebar3
       - name: Install rebar3 template
         run: make install-rebar-template
       - name: build plugins

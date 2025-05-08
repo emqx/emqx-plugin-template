@@ -35,13 +35,9 @@ install-rebar-template:
 	$(SCRIPTS)/install-rebar-template.sh
 
 .PHONY: build-test-plugins
-build-test-plugins:
+build-test-plugins: $(REBAR)
 	$(SCRIPTS)/build-sample-plugin.sh --tag 1.0.0 --name my_emqx_plugin_avsc --with-avsc --output-dir $(TEST_ASSETS_DIR)
 	$(SCRIPTS)/build-sample-plugin.sh --tag 1.0.0 --name my_emqx_plugin --output-dir $(TEST_ASSETS_DIR)
-
-.PHONY: build-plugin
-build-plugin:
-	$(SCRIPTS)/build-sample-plugin.sh --tag $(PLUGIN_VSN) --name $(PLUGIN_NAME) --with-avsc --output-dir $(PLUGIN_DIR)
 
 .PHONY: fmt
 fmt: $(REBAR)
