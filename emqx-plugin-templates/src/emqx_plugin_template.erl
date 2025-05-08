@@ -2,7 +2,7 @@
 -module(@@name@@).
 
 -define(PLUGIN_NAME, "@@name@@").
--define(PLUGIN_VSN, "1.0.0").
+-define(PLUGIN_VSN, "@@version@@").
 
 %% for #message{} record
 %% no need for this include if we call emqx_message:to_map/1 to convert it to a map
@@ -116,6 +116,8 @@ on_client_connect(ConnInfo, Props, some_arg) ->
     {ok, Props}.
 
 %% @doc
+%% This a fold hook callback.
+%%
 %% - Return `{stop, ok}' if this client is to be allowed to login.
 %% - Return `{stop, {error, not_authorized}}' if this client is not allowed to login.
 %% - Return `ignore' if this client is to be authenticated by other plugins
@@ -136,6 +138,8 @@ on_client_authenticate(#{clientid := ClientId} = _ClientInfo, DefaultResult) ->
     end.
 
 %% @doc
+%% This is a fold hook callback.
+%%
 %% - To permit/forbid actions, return `{stop, #{result => Result}}' where `Result' is either `allow' or `deny'.
 %% - Return `ignore' if this client is to be authorized by other plugins or
 %% EMQX's built-in authorization sources.
@@ -165,7 +169,7 @@ on_client_authorize(_ClientInfo = #{clientid := ClientId}, Action, Topic, _Resul
     ignore.
 
 %% @doc
-%% Demo callback working with messages.
+%% Demo callback working with messages. This is a fold hook callback.
 on_message_puback(_PacketId, #message{} = Message, PubRes, RC) ->
     NewRC =
         case RC of
@@ -268,4 +272,5 @@ handle_info(_Request, State) ->
     {noreply, State}.
 
 terminate(_Reason, _State) ->
+    persistent_term:erase(?MODULE),
     ok.
