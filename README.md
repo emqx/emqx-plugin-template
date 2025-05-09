@@ -74,13 +74,12 @@ The plugin skeleton created by the `rebar3 new emqx-plugin` represents a single 
 
 ```
 .
-├── LICENSE
 ├── Makefile
-├── priv
-│   ├── ...
 ├── README.md
 ├── rebar.config
 ├── scripts
+│   ├── ...
+├── priv
 │   ├── ...
 └── src
     ├── my_emqx_plugin_app.erl
@@ -90,13 +89,12 @@ The plugin skeleton created by the `rebar3 new emqx-plugin` represents a single 
     └── my_emqx_plugin_sup.erl
 ```
 
-* `src` - The code of the plugin's OTP application.
-* `priv` - The directory for the plugin's configuration files and configuration schema. It contains some example files.
-* `rebar.config` - The rebar3 configuration file used to build the application and pack it into a release.
 * `Makefile` - The entry point for building the plugin.
-* `scripts` - Helper scripts for the `Makefile`.
 * `README.md` - Documentation placeholder.
-* `LICENSE` - The plugin's sample license file.
+* `rebar.config` - The rebar3 configuration file used to build the application and pack it into a release.
+* `scripts` - Helper scripts for the `Makefile`.
+* `priv` - The directory for the plugin's configuration files and configuration schema. It contains some example files.
+* `src` - The code of the plugin's OTP application.
 
 #### `rebar.config`
 
@@ -112,21 +110,21 @@ In the `deps` section, you can add dependencies to other OTP applications that y
 ```erlang
 {deps,
     [
-        ...
-        %% this is my plugin's dependency
-        {map_sets, "1.1.0"}
+        {emqx_plugin_helper, {git, "https://github.com/emqx/emqx-plugin-helper.git", {tag, "v5.9.0"}}}
+        %% more dependencies
     ]}.
 ```
 
-The skeleton adds a single extra dependency to the plugin: `map_sets`. It may be removed if not needed. See
-[`rebar3` dependency documentation](https://www.rebar3.org/docs/configuration/dependencies/) for more details.
+The skeleton adds an extra dependency to the plugin: `emqx_plugin_helper`.
+It is usually needed for plugin code to make use of the record definitions and macros provided in the header files.
+See [`rebar3` dependency documentation](https://www.rebar3.org/docs/configuration/dependencies/) for more details.
 
 In the `relx` section, you specify the release name and version, and the list of applications to be included in the release.
 
 ```erlang
 {relx, [ {release, {my_emqx_plugin, "1.0.0"},
             [ my_emqx_plugin
-            , map_sets
+            , emqx_plugin_helper
             ]}
        ...
        ]}.
@@ -241,7 +239,7 @@ When a plugin is built into a release, the package structure is as follows:
 
 ```
 └── my_emqx_plugin-1.1.0.tar.gz
-    ├── map_sets-1.1.0
+    ├── emqx_plugin_helper_vsn-5.9.0
     ├── my_emqx_plugin-0.1.0
     ├── README.md
     └── release.json
@@ -272,7 +270,7 @@ I.e. the tarball contains the compiled applications (listed in the `relx` sectio
     "metadata_vsn": "0.2.0",
     "rel_apps": [
         "my_emqx_plugin-0.1.0",
-        "map_sets-1.1.0"
+        "emqx_plugin_helper-5.9.0"
     ],
     "rel_vsn": "1.1.0",
     "with_config_schema": true

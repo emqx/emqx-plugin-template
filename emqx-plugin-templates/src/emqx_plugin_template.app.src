@@ -4,7 +4,7 @@
     {vsn, "@@app_vsn@@"},
     {modules, []},
     {registered, [@@name@@_sup]},
-    {applications, [kernel, stdlib, emqx_plugin_helper, map_sets]},
+    {applications, [kernel, stdlib, emqx_plugin_helper]},
     {mod, {@@name@@_app, []}},
     {env, []},
     {licenses, ["@@license@@"]},
